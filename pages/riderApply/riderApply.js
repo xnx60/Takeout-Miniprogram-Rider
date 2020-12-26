@@ -95,7 +95,7 @@ Page({
             fail (reject){
               totast('系统出错，请重试')      
             },
-            // complete (){
+            // complete (){ 
             //   console.log(type);             
             // }
           })
