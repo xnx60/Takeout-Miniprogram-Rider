@@ -1,0 +1,8 @@
+<!--components/top-tabbar/top-tabbar.wxml-->
+<scroll-view scroll-x class="bg-white nav">
+  <view class="flex text-center">
+    <view class="cu-item flex-sub {{index==TabCur?'text-orange cur':''}}" wx:for="{{tabbarList}}" wx:key="{{index}}" bindtap="tabSelect" data-id="{{index}}">
+     {{item}}
+    </view>
+  </view>
+</scroll-view>

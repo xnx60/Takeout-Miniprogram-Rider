@@ -1,0 +1,20 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/orderHistory/orderHistory",
+    "pages/personPage/personPage",
+    "pages/position/position",
+    "pages/riderApply/riderApply",
+    "pages/orderDetail/orderDetail",
+    "pages/login/login",
+    "pages/infoCom/infoCom"
+  ],
+  "window": {
+    "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

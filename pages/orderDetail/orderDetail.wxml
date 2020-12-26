@@ -1,0 +1,113 @@
+<!--pages/item-detail/item-detail.wxml-->
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">订单详情</text>
+</cu-custom>
+
+<!-- 店铺信息 -->
+<view class="cu-card article no-card">
+  <view class="cu-item">
+    <view class="content">
+      <image src="" mode="aspectFill" style="width: 200rpx; height: 166rpx; margin-right: 0" class="margin-top bg-white"></image>
+      <view class="desc">
+        <view class="title text-cut" style=" width: 500rpx; font-size: 40rpx">{{item.shopName}}</view>
+        <view class="flex justify-between text-lg ">
+          <view  class="margin-left text-cut" style="width: 400rpx;" bindtap="showShopAddress">
+            <text>{{item.shopAddress}}</text>
+          </view>
+          <view class="cuIcon-phone lg text-xsl solid-left line-black padding-left" bindtap="callShop" data-phoneNum="{{item.businessPhone}}"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 订单信息 -->
+<view class="padding margin bg-white">
+  <view class="text-bold text-xl text-black solids-bottom padding-bottom margin-bottom">订单信息</view>
+  <view class="flex align-center margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:140rpx">订单状态</view>
+    <view class="flex-sub text-right text-df  text-red" wx:if="{{item.status == 1}}">待接单
+    </view>
+    <view class="flex-sub text-right text-df  text-yellow" wx:elif="{{item.status == 2}}">待取货
+    </view>
+    <view class="flex-sub text-right text-df  text-green" wx:else="{{item.status == 3}}">待送达
+    </view>
+  </view>
+  <view class="flex align-center margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:140rpx">订单编号</view>
+    <view class="flex-sub text-right text-df text-grey flex justify-end align-center">
+      <view>{{item.orderNumber}}</view>
+    </view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:250rpx">订单商品总件数</view>
+    <view class="flex-sub text-right text-df text-grey flex justify-end align-center">
+      <view>{{item.totalQuantity}}</view>
+    </view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:200rpx">订单总金额</view>
+    <view class="flex-sub text-right text-df text-grey flex justify-end align-center">
+      <view>{{item.totalAmount}}</view>
+    </view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:140rpx">用户备注</view>
+    <view class="flex-sub text-df text-grey">{{item.remarks}}</view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:200rpx">订单起始时间</view>
+    <view class="flex-sub text-right text-df text-grey">{{item.date}}</view>
+  </view>
+  <view class="flex align-center">
+    <view class="margin-right text-lg" style="width:200rpx">订单完成时间</view>
+    <view class="flex-sub text-right text-df text-grey">{{item.completeTime}}</view>
+  </view>
+</view>
+
+<!-- 配送信息 -->
+<view class="margin-bottom margin-lr padding bg-white">
+  <view class="text-bold text-xl text-black solids-bottom padding-bottom margin-bottom">配送信息</view>
+  <view class="flex align-center margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:250rpx">收货人姓名</view>
+    <view class="flex-sub text-right text-df text-grey">{{item.userName}}</view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:250rpx">收货人电话号码</view>
+    <view class="flex-sub text-df text-grey text-right text-cyon" bindtap="callShop" data-phoneNum="{{item.userPhone}}">{{item.userPhone}}
+    </view>
+  </view>
+  <view class="flex margin-bottom solids-bottom padding-bottom">
+    <view class="margin-right text-lg" style="width:140rpx">配送地址</view>
+    <view class="flex-sub text-right text-df text-grey">{{item.deliveryAddress}}</view>
+  </view>
+  <view class="flex align-center">
+    <view class="margin-right text-lg" style="width:140rpx">配送费</view>
+    <view class="flex-sub text-right text-df text-grey">{{item.deliveryFee}}</view>
+  </view>
+</view>
+
+<!-- 底部电话栏 -->
+<view class="cu-modal bottom-modal {{showBottomDialog?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl bg-white margin-bottom text-cyan" bindtap="confirmCall" wx:if="{{telephoneNumber}}">{{telephoneNumber}}</view>
+    <view class="padding-xl bg-white margin-bottom" wx:else><text class="cuIcon-dianhua text-cyan margin-right-sm"></text>{{PhoneName}}</view>
+    <view class="padding-xl" bindtap="hiddenBottomDialog">取消</view>
+  </view>
+</view>
+
+<!-- 商家地址详情弹窗 -->
+<view class="cu-modal {{showShopAddress?'show':''}}">
+  <view class="cu-dialog">
+    <view class="cu-bar bg-white justify-end">
+      <view class="content">商家地址</view>
+      <view class="action" bindtap="hideShopAddress">
+        <text class="cuIcon-close text-red"></text>
+      </view>
+    </view>
+    <view class="padding-xl">
+      {{item.shopAddress}}
+    </view>
+  </view>
+</view>

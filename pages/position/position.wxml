@@ -1,0 +1,25 @@
+<!--pages/position/position.wxml-->
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">定位</text>
+</cu-custom>
+
+<view class="text-center padding ">当前定位：{{nowLocation}}</view>
+
+<view class="cu-bar bg-white search">
+    <view class="search-form radius">
+      <text class="cuIcon-search"></text>
+      <input type="text" confirm-type="search" value="{{nowLocation}}" bindconfirm="changeLocation"></input>
+    </view>
+    <view class="action" bindtap="changeLocation">
+      <text>确定</text>
+    </view>
+  </view>
+
+<scroll-view scroll-y >
+  <view class="cu-list menu">
+    <view class="cu-item bg-white padding-left-lg solid-bottom" wx:for="{{schoolList}}" wx:key="index" bindtap="chooseLocate"  data-location="{{item}}" >
+      <text> {{item}}</text>
+    </view>
+  </view>
+</scroll-view>

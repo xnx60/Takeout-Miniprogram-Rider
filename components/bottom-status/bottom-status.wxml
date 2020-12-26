@@ -1,0 +1,10 @@
+<!--components/bottom-status/bottom-status.wxml-->
+<view class="bg-white pos-fixed flex align-center justify-center" style=" bottom: 0rpx; height: 130rpx; width: 100%; z-index: 2000">
+  <view class="text-yellow text-sl margin-left-xl">
+    <text class="cuIcon-scan"></text>
+  </view>
+  <button class="cu-btn block line-orange lg">
+    <text class="cuIcon-refresh"></text>
+     刷新列表
+  </button> 
+</view>

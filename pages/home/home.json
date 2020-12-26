@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "top-tabbar": "/components/top-tabbar/top-tabbar",
+    "order-item": "/components/order-item/order-item",
+    "bottom-status": "/components/bottom-status/bottom-status",
+    "bottom-telephoneBar": "/components/bottom-telephoneBar/bottom-telephoneBar"
+  }
+}

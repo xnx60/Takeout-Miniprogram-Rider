@@ -1,0 +1,17 @@
+/* 引入colorui样式 */
+@import "/colorui/main.wxss";
+@import "/colorui/icon.wxss";
+
+.pos-fixed {
+  position: fixed;
+}
+
+.pos-re {
+  position: relative;
+}
+
+.pos-ab {
+  position: absolute;
+}
+
+

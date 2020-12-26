@@ -1,0 +1,7 @@
+<!--pages/login/login.wxml-->
+<cu-custom bgColor="bg-cyan">
+  <text slot="content">微信登录</text>
+</cu-custom>
+<view>申请获得手机号</view>
+<button class="bg-green margin" style="margin-top:500rpx" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNum">授权登录</button>
+

@@ -1,0 +1,38 @@
+<!--components/order-item/order-item.wxml-->
+<view class="cu-card article {{isCard?'no-card':''}}">
+  <view class="cu-item shadow">
+    <view class="title flex">
+      <view class="cuIcon-time flex-treble">
+        预计
+        <text class="text-yellow">{{menu.time}}</text>
+        送达
+      </view>
+      <view class="title-lable text-xl text-red fr">{{menu.price}}</view>
+    </view>
+    <view class="cu-timeline" bindtap="showDetail">
+      <view class="cu-item cur">
+        <view class="content  shadow-blur">
+          <view class="text-bold text-center">
+            <text class="text-xl margin-right-xm">美团众包 骑手杨**</text>           
+          </view>
+          <!-- <view>骑手电话：*********</view> -->
+        </view>
+      </view>
+
+      <view class="cu-item text-red ">
+        <view class="content shadow-blur text-xl">
+          首都xxxxxxxxxx
+        </view>
+      </view>
+    </view>
+    <view class="flex">
+      <view class="flex-sub">
+        <button class="cu-btn lg line-black">联系骑手</button>
+      </view>
+      <view>
+        <button class="cu-btn lg bg-yellow disabled ">我已取货</button>
+      </view>
+      <button class="bg-yellow lg">抢单</button>
+    </view>  	
+  </view>
+</view>

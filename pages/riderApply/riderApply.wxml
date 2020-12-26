@@ -1,0 +1,53 @@
+<!--pages/riderApply/riderApply.wxml-->
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">证件上传</text>
+</cu-custom>
+
+<form action="">
+	<view class="padding bg-white">
+		<view class="flex">
+			<view class="flex-sub padding-sm margin-xs radius">
+				<!-- 图片 -->
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardR.url}}" wx:if="{{imgList.idCardR.url}}"></image>
+				<!-- 添加图片 -->
+				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.idCardR.label}}" wx:else>
+					<view class="text-center padding-lg  margin-top">
+						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
+					</view>
+				</view>
+				<view class="margin-top padding-left-xs">{{imgList.idCardR.name}}</view>			
+			</view>
+			<view class="flex-sub padding-sm margin-xs radius">
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardeB.url}}" wx:if="{{imgList.idCardeB.url}}"></image>
+				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.idCardeB.label}}" wx:else>
+					<view class="text-center padding-lg  margin-top">
+						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
+					</view>
+				</view>
+				<view class="margin-top padding-left-xs">{{imgList.idCardeB.name}}</view>
+			</view>
+		</view>
+		<view class="flex ">
+			<view class="flex-sub padding-sm margin-xs radius">
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.campusCard.url}}" wx:if="{{imgList.campusCard.url}}"></image>
+				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.campusCard.label}}" wx:else>
+					<view class="text-center padding-lg  margin-top">
+						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
+					</view>
+				</view>
+				<view class="margin-top padding-left-lg">{{imgList.campusCard.name}}</view>			
+			</view>
+			<view class="flex-sub padding-sm margin-xs radius">
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.stuIdCard.url}}" wx:if="{{imgList.stuIdCard.url}}"></image>
+				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.stuIdCard.label}}" wx:else>
+					<view class="text-center padding-lg  margin-top">
+						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
+					</view>
+				</view>
+				<view class="margin-top padding-left-lg">{{imgList.stuIdCard.name}}</view>
+			</view>
+		</view>
+	</view>
+	<view class="bg-green padding text-center margin-xl radius text-xxl">提交</view>
+</form>

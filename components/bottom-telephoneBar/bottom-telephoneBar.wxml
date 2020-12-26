@@ -1,0 +1,8 @@
+<!--components/bottom-telephoneBar/bottom-telephoneBar.wxml-->
+<view class="cu-modal bottom-modal {{showBottomDialog?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl bg-white margin-bottom text-cyan" bindtap="confirmCall" wx:if="{{phoneNumber}}">{{phoneNumber}}</view>
+    <view class="padding-xl bg-white margin-bottom" wx:else><text class="cuIcon-dianhua text-cyan margin-right-sm"></text></view>
+    <view class="padding-xl" bindtap="hiddenBottomDialog">取消</view>
+  </view>
+</view>

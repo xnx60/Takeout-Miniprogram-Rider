@@ -1,0 +1,19 @@
+<cu-custom bgColor="bg-cyan">
+  <text slot="content">信息完善</text>
+</cu-custom>
+
+<view class="cu-form-group">
+	<view class="title">校区选择</view>
+	<picker bindchange="PickerCampus" value="{{campusIndex}}" range="{{campusInfo}}">
+		<view class="picker">
+			{{campusIndex?campusInfo[campusIndex]:'未选择'}}
+		</view>
+	</picker>
+</view>
+
+<view class="cu-form-group">
+		<view class="title">姓名</view>
+		<input placeholder="请填写真实姓名" bindinput="getInputName"></input>
+</view>
+
+<view class="bg-green padding text-center margin-xl radius text-xxl" bindtap="infoSum" data-type="">确认</view>

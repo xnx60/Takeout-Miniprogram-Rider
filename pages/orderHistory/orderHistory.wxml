@@ -1,0 +1,5 @@
+<!--pages/orderHistory/orderHistory.wxml-->
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">订单历史</text>
+</cu-custom>

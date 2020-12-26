@@ -1,0 +1,185 @@
+<!--pages/ZDT/listWait/listWait.wxml-->
+<cu-custom bgColor="bg-cyan" isMore="true" isLocated="true" bindemitIsShow="handleMore">
+  <text slot="content">接单设置</text>
+</cu-custom>
+
+<!-- 更多部分弹窗 -->
+<view class="popup-window pos-fixed" style="left:25rpx;top:180rpx;width:250rpx;z-index: 50;" wx:if="{{isShow}}">
+  <view class="tri pos-ab" style="top:-50rpx;left:0px; width:0; height:0;border:10px solid transparent;border-bottom-color:#444444;"></view>
+  <view class="cu-list menu{{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+    <view class="cu-item bg-grey {{menuArrow?'arrow':''}}" bindtap="toProfile">
+      <view class="content">
+        <text class="cuIcon-profile text-grey"></text>
+        <text class="text-grey">个人中心</text>
+      </view>
+    </view>
+    <view class="cu-item {{menuArrow?'arrow':''}}" bindtap="toHistory">
+      <view class="content">
+        <text class="cuIcon-message text-grey"></text>
+        <text class="text-grey">接单历史</text>
+      </view>
+    </view>  
+  </view>
+</view>
+
+<!-- 顶部导航栏 -->
+<top-tabbar bindemitIndex="handleEmitIndex"></top-tabbar>
+
+<!-- 订单模块 -->
+<view class="order-module margin-bottom-xl" >
+    <view class="list-wait" wx:if="{{index == 0}}">
+      <block wx:for="{{orders.orderLists.lists}}" wx:key="{{index}}">
+        <view class="order-item">
+          <view class="cu-card article {{isCard?'no-card':''}}">
+            <view class="cu-item shadow">
+              <view class="title flex">
+                <view class="cuIcon-time flex-treble">
+                  预计
+                  <text class="text-yellow">{{item.time}}</text>
+                  送达
+                </view>
+                <view class="title-lable text-xl text-red fr">{{item.deliveryFee}}</view>
+              </view>
+              <!-- 时间轴 -->
+              <view class="cu-timeline" bindtap="showDetailPage" data-item="{{item}}">
+                <view class="cu-item cur">
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-xl margin-right-xm text-bold">{{item.shopName}}</text>   
+                    </view>
+                  </view> 
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm">{{item.shopAddress}}</text>           
+                    </view>
+                  </view>                  
+                </view>
+
+                <view class="cu-item text-red ">
+                  <view class="content shadow-blur text-xl">
+                    {{item. deliveryAddress}}
+                  </view>
+                </view>
+              </view>
+              <view class="flex">
+                <button class="bg-yellow lg" bindtap="takeOrders" data-item="{{item}}" data-index="{{index}}">抢单</button>
+              </view>  	
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="pick-up" wx:elif="{{index == 1}}">
+      <block wx:for="{{orders.goodsLists.lists}}" wx:key="{{index}}">
+        <view class="order-item">
+          <view class="cu-card article {{isCard?'no-card':''}}">
+            <view class="cu-item shadow">
+              <view class="title flex">
+                <view class="cuIcon-time flex-treble">
+                  预计
+                  <text class="text-yellow">{{item.time}}</text>
+                  送达
+                </view>
+                <view class="title-lable text-xl text-red fr">#{{item.orderNumber}}</view>
+              </view>
+              <!-- 时间轴 -->
+              <view class="cu-timeline" bindtap="showDetailPage" data-item="{{item}}">
+                <view class="cu-item cur">
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-xl margin-right-xm text-bold">{{item.shopName}}</text>   
+                    </view>
+                  </view> 
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm">{{item.shopAddress}}</text>           
+                    </view>
+                  </view>                  
+                </view>
+
+                <view class="cu-item text-red ">
+                  <view class="content shadow-blur text-xl">
+                    首都xxxxxxxxxx
+                  </view>
+                </view>
+              </view>
+              <view class="padding flex justify-between align-center bg-white">
+                <button class="cu-btn text-xl" style="width: 120px; height:30px" bindtap="callCusMer" data-phoneNum="{{item.businessPhone}}"> 联系商家</button>
+                <button class="cu-btn bg-yellow text-xl" style="width: 120px; height:30px" bindtap="takeGoods" data-item="{{item}}" data-index="{{index}}">我已取货</button>
+              </view> 	
+            </view>
+          </view>
+        </view>
+
+        
+      </block>
+    </view>
+    <view class="delivery-wait" wx:else>
+      <block wx:for="{{orders.deliveryLists.lists}}" wx:key="{{index}}">
+        <view class="order-item">
+          <view class="cu-card article {{isCard?'no-card':''}}">
+            <view class="cu-item shadow">
+              <view class="title flex">
+                <view class="cuIcon-time flex-treble">
+                  预计
+                  <text class="text-yellow">{{item.time}}</text>
+                  送达
+                </view>
+                <view class="title-lable text-xl text-red fr">{{item.price}}</view>
+              </view>
+              <view class="cu-timeline" bindtap="showDetailPage" data-item="{{item}}">
+                <view class="cu-item cur">
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-xl margin-right-xm text-bold">{{item.shopName}}</text>     
+                    </view>
+                    <!-- <view class="text-center">
+                      <text class="text-xl margin-right-xm">骑手杨**</text>           
+                    </view> -->
+                  </view>
+                </view>
+
+                <view class="cu-item text-red ">
+                  <view class="content shadow-blur text-xl">
+                    首都xxxxxxxxxx
+                  </view>
+                  <view class="content text-sm" >
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm margin-right-xm">{{item.userName}}</text>        
+                    </view>
+                    <view class="text-center">
+                      <text class="text-sm margin-right-sm">（先生）</text>           
+                    </view>
+                    <view class="text-center">
+                      <text class="text-sm margin-right-xm">{{item.userPhone}}</text>           
+                    </view>
+                  </view>  
+                </view>
+              </view>
+
+              <view class="padding flex justify-between align-center bg-white">
+                <button class="cu-btn text-xl" style="width: 120px; height:30px" bindtap="callCusMer" data-phoneNum="{{item.userPhone}}">联系顾客</button>
+                <button class="cu-btn bg-yellow text-xl" style="width: 120px; height:30px" bindtap="deliveryGoods" data-item="{{item}}" data-index="{{index}}">我已送达</button>
+              </view>
+
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+</view>
+
+<!-- 底部刷新列表 -->
+<bottom-status  wx:if="{{index == 0}}" bindtap="updateList"></bottom-status>
+<!-- 底部电话栏 -->
+<view class="cu-modal bottom-modal {{showBottomDialog?'show':''}}">
+  <view class="cu-dialog">
+    <view class="padding-xl bg-white margin-bottom text-cyan" bindtap="confirmCall" wx:if="{{telephoneNumber}}">{{telephoneNumber}}</view>
+    <view class="padding-xl bg-white margin-bottom" wx:else><text class="cuIcon-dianhua text-cyan margin-right-sm"></text></view>
+    <view class="padding-xl" bindtap="hiddenBottomDialog">取消</view>
+  </view>
+</view>
+<!-- <bottom-telephoneBar phoneNumber="{{telephoneNumber}}"></bottom-telephoneBar> -->
+
+
+  
