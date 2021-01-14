@@ -27,8 +27,10 @@ export const TOKEN='token'
 /**
  * 配置网络请求相关的常量
  */
-// export const BASE_URL = 'https://192.168.1.109:8888'
+// export const BASE_URL = 'https://192.168.1.107:8888'
 export const BASE_URL = 'https://www.lizeqiang.top:8888'
+
+
 
 // 凯悦状态码
 export const STATUS_CODE_getOrders_SUCCESSE = 1024
@@ -37,12 +39,13 @@ export const STATUS_CODE_getOrdersDetail_SUCCESSE = 1024
 export const STATUS_CODE_updateOrderStatus_SUCCESSE = 1024
 
 // 东龙状态码
-export const STATUS_CODE_register_SUCCESSE = 3251
-export const STATUS_CODE_login_SUCCESSE = 3252
-export const STATUS_CODE_infoSum_ParamNone = 1500
-export const STATUS_CODE_infoSum_ParamError = 1500
+export const STATUS_CODE_login_SUCCESSE = 1209
+export const STATUS_CODE_checkLoginStatus_SUCCESSE = 1200
+
+export const STATUS_CODE_infoSum_SUCCESSE = 3200
 export const STATUS_CODE_selectAllCampusName_SUCCESSE = 3200
-export const STATUS_CODE_updatePhoto_SUCCESSE = 1205
+export const STATUS_CODE_updatePhoto_SUCCESSE = 1205 //上传图片
+export const STATUS_CODE_submitProve_SUCCESSE = 1204 //提交审核材料
 
 
 
@@ -54,7 +57,9 @@ export const API_URL_updateOrderStatus = '/order/updateOrderStatus'
 
 // 东龙接口
 export const API_URL_login = '/driverinfo/login'
-export const API_URL_infoSum = '/driverinfo/insert'
+export const API_URL_checkLoginStatus = '/driverinfo'
+
+export const API_URL_infoSum = '/driverinfo/update'
 export const API_URL_selectAllCampusName = '/campus/selectAllCampusName'
 export const API_URL_updatePhoto = '/driverprove/updatePhoto'
 export const API_URL_submitProve = '/driverprove/uploadPicture'

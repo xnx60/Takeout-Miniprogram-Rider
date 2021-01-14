@@ -1,10 +1,13 @@
 import {
   BASE_URL,
   API_URL_login,
-  STATUS_CODE_register_SUCCESSE,
   STATUS_CODE_login_SUCCESSE,
   totast
 } from '../../service/config' 
+import {
+  checkLoginStatus
+}from '../../service/login'
+
 Page({
 
   /**
@@ -37,6 +40,9 @@ Page({
     })
   },
   getPhoneNum(e){
+    // console.log(e);
+    // console.log(e.detail.encryptedData);
+    // console.log(e.detail.iv);   
     if(e.detail.errMsg == 'getPhoneNumber:ok'){
       wx.request({
         url: BASE_URL+API_URL_login,
@@ -51,18 +57,17 @@ Page({
         },
         success: res=>{
           console.log(res);
-          if(res.data.code == STATUS_CODE_register_SUCCESSE){
-            // 骑手不存在，注册成功
-            wx.setStorageSync('id',res.data.data.riderId)
-            wx.setStorageSync('token',res.data.data.riderToken)
-            wx.redirectTo({
-              url: '/pages/infoCom/infoCom',
-            })
-          } else if(res.data.code == STATUS_CODE_login_SUCCESSE){
-            // 骑手存在，登录成功
-            wx.redirectTo({
-              url: '/pages/home/home'
-            })
+          if(res.data.code == STATUS_CODE_login_SUCCESSE){
+            console.log('登录成功');           
+            wx.setStorageSync('id',res.data.data.driverId)
+            wx.setStorageSync('token',res.data.data.driverToken)
+            const driverId =wx.getStorageSync('id') 
+            app.globalData.disCampus = driverId       
+            this._checkLoginStatus(driverId)
+          } 
+          else if(res.data.code == 1500){
+            // 传入参数为空  
+            console.log('传入参数为空');                  
           }        
         },
         fail: reject=>{        
@@ -73,6 +78,32 @@ Page({
       totast('授权失败，请重新授权')      
     }
     
-  }
+  },
   
+  _checkLoginStatus(driverId){
+    checkLoginStatus(driverId).then(res=>{
+      console.log(driverId); //24  
+      console.log(res);            
+      if(res.data.code==2508){
+        // 骑手还没上传证明材料
+        wx.redirectTo({
+          url: '/pages/infoCom/infoCom',
+        })
+      }else if(res.data.code==2550 || res.data.code==2552){
+        // 骑手正在审核/审核未通过
+        wx.redirectTo({
+          url: '/pages/exanPage/examPage?status=' + JSON.stringify(res.data.code)
+        })
+      }else if(res.data.code==2551){
+        // 审核通过
+        wx.redirectTo({
+          url: '/pages/home/home',
+        })
+      } else {
+        
+      }
+    })
+  }
+
+
 })

@@ -12,27 +12,29 @@ export function selectAllCampus(){
   })
 }
 
-export function infoSum(disCampus, driverName){
+export function infoSum(disCampus, driverName,driverGender,driverId){
   return request({
     url:  API_URL_infoSum,
     method:'POST',
     data:{
       disCampus,
-      driverName
+      driverName,
+      driverGender,
+      driverId
     },
   })
 }
 
-export function submitProve(driverId,driverIdcardBehind, driverIdcardFront,schoolCard,studentCard){
+export function submitProve(driverId,driverIdcardFront,driverIdcardBehind,schoolCard,studentCard){
   return request({
     url: API_URL_submitProve,
     method:'POST',
     data:{
       driverId,
+      driverIdcardFront,
       driverIdcardBehind,
-       driverIdcardFront,
        schoolCard,
        studentCard
     },
-  },'application/x-www-form-urlencoded')
+  })
 }

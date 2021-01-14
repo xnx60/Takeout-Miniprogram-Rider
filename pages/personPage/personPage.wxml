@@ -28,4 +28,3 @@
     </view>
   </picker>
 </view>
-<button bindtap="btn">按钮</button>

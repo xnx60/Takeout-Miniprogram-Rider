@@ -62,10 +62,13 @@ App({
     })
   },
   globalData: {
+    disCampus:'广东工业大学生活西区',
+    driverId:24,
+
     userInfo: null,
     nowLocation:'广东工业大学',
-    disCampus:'',
-    campus:'广东工业大学',
+    disCampus:'广东工业大学生活西区',
+    campus:'广东工业大学生活西区',
     disName:''
   }
 })

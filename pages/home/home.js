@@ -11,7 +11,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-    campus:app.globalData.campus,
+    disCampus:app.globalData.disCampus,
+    driverId:app.globalData.driverId,
     telephoneNumber:1234567,
     orders:{
       orderLists:{
@@ -107,8 +108,8 @@ Page({
     const type= status==1?'orderLists':status==2?'goodsLists':status==3?'deliveryLists':'endUpLists'
     const goods = this.data.orders[type]
     const pageNum=goods.page
-    const campus=status==1?this.data.campus:null
-    const riderId=status!=1?9:null
+    const campus=status==1?this.data.disCampus:null
+    const riderId=status!=1?this.data.driverId:null
     getOrdersDetail(pageNum,size,status,campus,riderId).then(res=>{
       // console.log(res);
       
@@ -136,11 +137,11 @@ Page({
     const id=allId.id
     const orderId=allId.orderId
     const orderNumber=allId.orderNumber
-    const riderId=allId.riderId
+    const riderId=this.data.driverId
     const shopId=allId.shopId
     const status=allId.status
     const userId=allId.userId
-    getOrders(id,orderId,orderNumber,9,shopId,1,userId).then(res=>{
+    getOrders(id,orderId,orderNumber,riderId,shopId,1,userId).then(res=>{
       // console.log(res);
       
       this._getOrdersDetail(2)    
@@ -190,9 +191,7 @@ _updateOrderStatus(item,status){
     wx.showModal({
       content:'是否确认接收此订单',
       success: (res)=>{
-        if(res.confirm){  
-          
-          
+        if(res.confirm){            
           this._updateOrderStatus(item,7)
         
           console.log('点击确定取货');

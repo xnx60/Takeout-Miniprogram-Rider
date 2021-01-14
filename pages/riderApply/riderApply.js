@@ -5,7 +5,8 @@ import {
   TOKEN,
   loading,
   hideLoading,
-  STATUS_CODE_updatePhoto_SUCCESSE
+  STATUS_CODE_updatePhoto_SUCCESSE,
+  STATUS_CODE_submitProve_SUCCESSE
 }from '../../service/config'
 import {
   submitProve
@@ -22,9 +23,9 @@ Page({
         label:'idCardR',
         url:''
       },
-      idCardeB:{
+      idCardB:{
         name:'身份证反面',
-        label:'idCardeB',
+        label:'idCardB',
         url:''
       },
       campusCard:{
@@ -40,7 +41,7 @@ Page({
     }, 
     returnUrlList:{
       idCardR:'',
-      idCardeB:'',
+      idCardB:'',
       campusCard:'',
       stuIdCard:''
     },
@@ -70,8 +71,7 @@ Page({
             formData: {
               name: type
             },      
-            success (res){
-              
+            success (res){             
               loading('正在上传')
               // console.log(res);
               const data = JSON.parse(res.data)　
@@ -80,38 +80,46 @@ Page({
                 totast(data.msg)
                 const returnUrlItem=data.data.url
                 const returnNameItem=data.data.name
-                let returnUrl=_this.data.returnUrl
+                let returnUrl=_this.data.returnUrlList
                 for (let key in returnUrl){
                   if(key==returnNameItem){
                     returnUrl[key]=returnUrlItem
                   }
                 }
-                console.log(returnUrl);
-                
+                console.log(returnUrl);              
               }  else {
                 totast(data.msg)
               }       
             },
             fail (reject){
+              console.log(reject);             
               totast('系统出错，请重试')      
             },
-            // complete (){ 
-            //   console.log(type);             
-            // }
           })
       }
     });
   },
-  
+  infoSub(){
+    this._submitProve(this.data.returnUrlList)
+  },
   _submitProve(returnUrlList){
     const driverId=wx.getStorageSync('id')
-    
+    const idCardR=returnUrlList.idCardR || null
+    const idCardB=returnUrlList.idCardB || null
+    const campusCard=returnUrlList.campusCard || null
+    const stuIdCard=returnUrlList.stuIdCard || null
     loading('正在上传')
-    submitProve(driverId,idCardR,idCardeB,campusCard,stuIdCard).then(res=>{
+    submitProve(23,idCardR,idCardB,campusCard,stuIdCard).then(res=>{
       hideLoading()
-      wx.redirectTo({
-        url: '',
-      })
+      console.log(res);     
+      if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
+        totast('提交成功')
+      // wx.redirectTo({
+      //   url: '',
+      // })        
+      } else if (res.data.code==1500){
+        totast(res.data.msg)
+      }    
     })
   }
 })

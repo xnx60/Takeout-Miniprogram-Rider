@@ -2,8 +2,7 @@ import {
   totast,
   API_URL_infoSum,
   BASE_URL,
-  STATUS_CODE_infoSum_ParamNone,
-  STATUS_CODE_infoSum_ParamError,
+  STATUS_CODE_infoSum_SUCCESSE,
   STATUS_CODE_selectAllCampusName_SUCCESSE
 }from '../../service/config'
 import {
@@ -18,55 +17,78 @@ Page({
    */
   data: {
     disCampus:app.globalData.disCampus,
-    disName:app.globalData.disName,
-    campusInfo:['广东工业大学生活西区','广东工业大学生活东区'],
-    campusName:[],
+    disName:'',
+    campusInfo:[],
+    campusNameList:[],
+    genderPicker:['男','女'],
+    genderIndex:null,
     campusIndex:null
   },
+  onLoad(){
+    this._selectAllCampus()
+  },
+
   PickerCampus(e) {
-    // this._selectAllCampus()
-    const disCampus=this.data.campusInfo[e.detail.value]   
+    const disCampus=this.data.campusNameList[e.detail.value] 
     const campusIndex=e.detail.value
     this.setData({
       campusIndex,
       disCampus
     })
+    wx.setStorageSync('campus', disCampus)
+    app.globalData.disCampus=disCampus
   },
+
+  PickerGender(e) {
+    // console.log(e);
+    this.setData({
+      genderIndex: e.detail.value
+    })
+  },
+
+  getInputName(e){   
+    this.setData({
+      disName:e.detail.value
+    }) 
+},
+
   infoSum(){
-    this._infoSum(this.data.disCampus, this.data.disName)
+   const driverId= wx.getStorageSync('id')
+    this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
   },
-  _infoSum(disCampus,disName){     
-    infoSum(disCampus, disName).then(res=>{  
-      if(res.data.code==STATUS_CODE_infoSum_ParamNone){
-        totast(res.msg)
-      } else if(res.data.code==STATUS_CODE_infoSum_ParamError){
-        totast()
-      } else{
+
+  _infoSum(disCampus,disName,driverGender,driverId){     
+    infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+      if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
         wx.redirectTo({
           url: '/pages/riderApply/riderApply',
         })
+      } else if(res.data.code==1500){
+        totast(res.data.msg)
       }
-
     }).catch(reject=>{
       totast('提交失败，请重试')
     })
 
   },
-  getInputName(e){   
-      this.setData({
-        disName:e.detail.value
-      }) 
-  },
+
   _selectAllCampus(){   
     selectAllCampus().then(res=>{
-      console.log(res);
+      // console.log(res);
       if(res.data.code==STATUS_CODE_selectAllCampusName_SUCCESSE){
-        console.log(res);
+        const campusInfo=res.data.data
+        const campusNameList=this.data.campusNameList
+        for(let i in campusInfo){
+          // console.log(campusInfo[i].campusName);         
+          campusNameList.push(campusInfo[i].campusName)
+        }
+        // console.log(res);
         this.setData({
-          campusInfo:res.data.data
+          campusInfo,
+          campusNameList
         })
       } else{
-        totast('查询失败')
+        totast('校区查询失败')
       }
     })
   }

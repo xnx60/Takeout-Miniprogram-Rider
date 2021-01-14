@@ -7,7 +7,8 @@
     "pages/riderApply/riderApply",
     "pages/orderDetail/orderDetail",
     "pages/login/login",
-    "pages/infoCom/infoCom"
+    "pages/infoCom/infoCom",
+    "pages/examPage/examPage"
   ],
   "window": {
     "navigationStyle": "custom"

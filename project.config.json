@@ -109,6 +109,18 @@
         {
           "name": "pages/infoCom/infoCom",
           "pathName": "pages/infoCom/infoCom",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/riderApply/riderApply",
+          "pathName": "pages/examPage/examPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/examPage/examPage",
+          "pathName": "pages/examPage/examPage",
           "scene": null
         }
       ]
