@@ -1,30 +1,23 @@
 <!--pages/personPage.wxml-->
-<cu-custom bgColor="bg-cyan" isBack="true">
-  <text slot="backText">返回</text>
+<cu-custom bgColor="bg-cyan" isPerserve="true">
+  <text slot="perserveText" bindtap="isPerserve">返回</text>
   <text slot="content">个人页面</text>
 </cu-custom>
 
 <view class="cu-form-group">
-  <view class="title">头像</view>
-  <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-    <view class="picker">
-      <view class="cu-avatar radius bg-gray"></view>
-    </view>
-  </picker>
+		<view class="title">头像</view>
+		<view class="cu-avatar radius bg-gray"></view>
 </view>
-<view class="cu-form-group margin-top">
-  <view class="title">姓名</view>
-  <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-    <view class="picker">
-      ***
-    </view>
-  </picker>
+<view class="cu-form-group">
+		<view class="title">姓名</view>
+		<view>{{disName}}</view>
 </view>
-<view class="cu-form-group margin-top">
-  <view class="title">电话号码</view>
-  <picker bindchange="PickerChange" value="{{index}}" range="{{picker}}">
-    <view class="picker">
-      188****
-    </view>
-  </picker>
+
+<view class="cu-form-group">
+	<view class="title">校区选择</view>
+	<picker bindchange="PickerCampus" value="{{campusIndex}}" range="{{campusNameList}}">
+		<view class="picker">
+			{{campusIndex?campusNameList[campusIndex]:disCampus}}
+		</view>
+	</picker>
 </view>

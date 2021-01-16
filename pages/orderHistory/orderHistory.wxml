@@ -1,5 +1,36 @@
-<!--pages/orderHistory/orderHistory.wxml-->
-<cu-custom bgColor="bg-cyan" isBack="true">
-  <text slot="backText">返回</text>
-  <text slot="content">订单历史</text>
+<cu-custom bgColor="bg-green" isBack="true">
+  <view slot="backText">账单</view>
 </cu-custom>
+<view class="padding flex bg-white border-bottom text-lg">
+  <view class="flex-sub">
+    <text>本月销量 </text>
+    <text class="cuIcon-rank text-blue" style="font-size:36rpx;"></text>
+    <text class=""> {{seleteTime.monthlyOrderQuantity}}</text>
+  </view>
+  <view class="text-right flex-sub">
+    <text>本月收入 </text>
+    <text class="cuIcon-moneybag text-red" style="font-size:36rpx;"></text>
+    <text> {{seleteTime.monthlyIncome}}</text>
+  </view>
+</view>
+<view class="text-lg bg-white padding flex justify-between">
+  <picker mode="date" value="{{seleteTime.date}}" start="{{seleteTime.start}}" end="{{seleteTime.end}}" bindchange="dateChange" fields="day">
+    <text class="text-blue">{{seleteTime.date}}</text>
+    <text class="cuIcon-write"></text>
+  </picker>
+  <view>本日收入 <text class="text-red cuIcon-recharge" style="font-size:36rpx;"><!--  ￥  --></text><text class="text-red"> {{seleteTime.totalIncome}}</text></view>
+</view>
+<view class="margin-top-sm bg-white">
+  <view class="flex padding justify-between align-center solids-bottom" wx:for="{{incomeDetail}}">
+    <view>
+      <view class="text-lg text-black">{{item.orderNumber}}</view>
+      <view class="text-grey">{{item.date}}</view>
+    </view>
+    <view class="text-yellow text-lg text-bold">+{{item.totalAmount}}</view>
+  </view>
+</view>
+<view class="flex text-sm text-center align-center margin-tb-xl">
+    <view class="flex-sub border" style="height:2rpx"></view>
+    <view class="margin-lr">已经到底啦</view>
+    <view class="flex-sub border" style="height:2rpx"></view>
+  </view>

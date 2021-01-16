@@ -1,68 +1,87 @@
 import {
-  getOrdersHistory
-}from '../../service/home'
+  getSaleHistory,
+  getOrderHistory
+}from '../../service/orderHistory'
+import {
+  STATUS_CODE_getSaleHistory_SUCCESS,
+  STATUS_CODE_getOrderHistory_SUCCESS,
+   STATUS_CODE_SUCCESSE, totast, hideLoading, loading
+}from '../../service/config'
+import{
+  getCurrentTime
+}from '../../utils/getCurrentTime'
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    seleteTime: {
+      date: '',
+      start: '2020-01-01',
+      end: '',
+      totalIncome: 0,
+      monthlyIncome:0,
+      monthlyOrderQuantity:0,
+      pageNumber:1
+    },
+    incomeDetail: [
+      
+    ]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  async onLoad(){
+    await this.initTime()
+    await this.getOrderHistory()
+    /* this.getSaleHistory() */
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  getOrderHistory(){
+    let {seleteTime,incomeDetail} = this.data
+    loading('加载中')
+    getOrderHistory(seleteTime.date,seleteTime.pageNumber).then(res=>{
+      if(res && (res.data.code == STATUS_CODE_SUCCESSE || res.data.code == STATUS_CODE_getOrderHistory_SUCCESS)){
+        seleteTime.pageNumber += 1
+        for (const item of res.data.data.list) {
+          incomeDetail.push(item)
+        }
+        this.setData({
+          seleteTime:this.data.seleteTime,
+          incomeDetail:this.data.incomeDetail
+        })
+      }else{
+        totast('订单历史加载失败,请重试',2000)
+      }
+      hideLoading()
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  getSaleHistory(){
+    const {seleteTime} = this.data
+    loading('加载中')
+    getSaleHistory(seleteTime.date).then(res=>{
+      if(res && (res.data.code == STATUS_CODE_SUCCESSE || res.data.code == STATUS_CODE_getSaleHistory_SUCCESS)){
+        seleteTime.monthlyIncome = res.data.data.monthlyIncome.toFixed(2)
+        seleteTime.monthlyOrderQuantity = res.data.data.monthlyOrderQuantity
+        seleteTime.totalIncome = res.data.data.dailyIncome.toFixed(2)
+        this.setData({
+          seleteTime:this.data.seleteTime
+        })
+      }else{
+        totast('订单历史加载失败,请重试',2000)
+      }
+      hideLoading()
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  initTime(){
+    const {seleteTime} = this.data
+    seleteTime.date = getCurrentTime()
+    seleteTime.end = getCurrentTime()
+    this.setData({
+      seleteTime:this.data.seleteTime
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
+  async dateChange(e) {
+    let {seleteTime} = this.data
+    seleteTime.date = e.detail.value
+    seleteTime.pageNumber = 1
+    await this.setData({
+      seleteTime:this.data.seleteTime
+    })
+    await this.getOrderHistory()
+    this.getSaleHistory()
   }
 })

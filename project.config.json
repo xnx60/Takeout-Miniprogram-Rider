@@ -121,6 +121,12 @@
         {
           "name": "pages/examPage/examPage",
           "pathName": "pages/examPage/examPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/personPage/personPage",
+          "pathName": "pages/personPage/personPage",
           "scene": null
         }
       ]

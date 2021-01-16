@@ -1,16 +1,13 @@
-<cu-custom bgColor="bg-cyan"  isBack="true">
+<cu-custom bgColor="bg-cyan" >
   <text slot="content">审核页面</text>
-  <text slot="backText">返回</text>
+  <!-- <text slot="backText" bindtap="">返回</text> -->
 </cu-custom>
 <view class="text-xxl padding-lr text-center" style="margin-top:500rpx">
-    <view class="flex-sub" wx:if="{{this.data.status == 2550}}">
+    <view class="flex-sub" wx:if="{{status === 2550}}">
       <text>当前处于审核流程，待审核通过后才可使用</text>      
     </view>
-    <view class="flex-sub" wx:else="{{this.data.status == 2552}}">
+    <view class="flex-sub" wx:else>
       <text>审核未通过，请重新提交证明材料</text>
       <button class="bg-green margin" style="margin-top:350rpx" bindtap="backApplyPage">重试</button>
     </view>
-    <!-- <view class="flex-sub" wx:else="{{this.data.status == 2552}}">
-      <text>审核通过，可以开始你的旅行啦！</text>
-    </view> -->
 </view>

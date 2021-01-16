@@ -3,7 +3,8 @@ import {
   API_URL_selectAllCampusName,
   API_URL_infoSum,
   API_URL_updatePhoto,
-  API_URL_submitProve
+  API_URL_submitProve,
+  API_URL_getDriverInfo
 } from './config'
 
 export function selectAllCampus(){
@@ -37,4 +38,14 @@ export function submitProve(driverId,driverIdcardFront,driverIdcardBehind,school
        studentCard
     },
   })
+}
+
+export function getDriverInfo(driverId){
+  return request({
+    url: API_URL_getDriverInfo,
+    method:'POST',
+    data:{
+      driverId
+    },
+  },'application/x-www-form-urlencoded')
 }

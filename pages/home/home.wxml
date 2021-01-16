@@ -1,12 +1,12 @@
 <!--pages/ZDT/listWait/listWait.wxml-->
-<cu-custom bgColor="bg-cyan" isMore="true" isLocated="true" bindemitIsShow="handleMore">
+<cu-custom bgColor="bg-cyan" isMore="true" bindemitIsShow="handleMore">
   <text slot="content">接单设置</text>
 </cu-custom>
 
 <!-- 更多部分弹窗 -->
-<view class="popup-window pos-fixed" style="left:25rpx;top:180rpx;width:250rpx;z-index: 50;" wx:if="{{isShow}}">
-  <view class="tri pos-ab" style="top:-50rpx;left:0px; width:0; height:0;border:10px solid transparent;border-bottom-color:#444444;"></view>
-  <view class="cu-list menu{{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
+<view class="popup-window pos-fixed" style="left:10rpx;top:150rpx;width:250rpx;z-index: 50;" wx:if="{{isShow}}">
+  <!-- <view class="tri pos-ab" style="top:-50rpx;left:0px; width:0; height:0;border:10px solid transparent;border-bottom-color:#444444;"></view> -->
+  <view class="cu-list menu{{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}" wx:if="{{isShow}}">
     <view class="cu-item bg-grey {{menuArrow?'arrow':''}}" bindtap="toProfile">
       <view class="content">
         <text class="cuIcon-profile text-grey"></text>

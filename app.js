@@ -1,7 +1,15 @@
-//app.js
-const TOKEN='token'
+import {
+  totast,
+  loading,
+  hideLoading,
+  WEB_SOCKET_URL
+} from './service/config'
+import bus from './utils/bus'
+const TOKEN = 'token'
+
 App({
   onLaunch: function () {
+    this.globalData.bus = bus
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -16,20 +24,13 @@ App({
       icon: 'success',
       duration: 2000
     })
-  // 登录操作
+    // 登录操作
 
-    const token =wx.getStorageSync(TOKEN)   
-    const id =wx.getStorageSync('id')  
-     
-    // if(!token){
-    //   console.log('跳转');      
-    //   wx.redirectTo({
-    //     url: '/pages/login/login',
-    //   })
-    // }
-    console.log('id');
-    
-    
+    const token = wx.getStorageSync(TOKEN)
+    const id = wx.getStorageSync('id')
+
+
+
 
     // 获取用户信息
     wx.getSetting({
@@ -56,19 +57,73 @@ App({
       success: e => {
         this.globalData.StatusBar = e.statusBarHeight;
         let custom = wx.getMenuButtonBoundingClientRect();
-        this.globalData.Custom = custom;  
+        this.globalData.Custom = custom;
         this.globalData.CustomBar = custom.bottom + custom.top - e.statusBarHeight;
       },
     })
   },
+  onShow() {
+    this.wsConnect()
+  },
+  async wsConnect() {
+    if (wx.getStorageSync('id')) {
+      await this.wsClose()
+      loading('加载中')
+      wx.connectSocket({
+        url: WEB_SOCKET_URL,
+        timeout: 2000,
+        header: {
+          'content-type': 'application/json'
+        },
+        success: (res) => {
+          this.wsOpen()
+          hideLoading()
+        },
+        fail: (res) => {
+          totast('订单实时更新失败,请尝试重新进入', 3000)
+        }
+      })
+    }
+  },
+  wsMessage() {
+    wx.onSocketMessage((res) => {
+      console.log('message', res);
+      let parseData = {}
+      if (res.data !== '服务器连接成功！') {
+        parseData = JSON.parse(res.data)
+        this.globalData.bus.emit('orderDataChange', parseData)
+        totast('你有新订单啦', 2000)
+      }
+    })
+  },
+  wsSend() {
+    wx.sendSocketMessage({
+      data: JSON.stringify({
+        rid: wx.getStorageSync('id'),
+        identity: 'rider',
+        campus: wx.getStorageSync('campus')
+      }),
+      success: res => {
+        console.log('send', res);
+        this.wsMessage()
+      }
+    })
+  },
+  wsOpen() {
+    wx.onSocketOpen((result) => {
+      console.log('open', result);
+      this.wsSend()
+    })
+  },
+  wsClose() {
+    wx.onSocketClose((result) => {
+      console.log('close', result);
+    })
+  },
   globalData: {
-    disCampus:'广东工业大学生活西区',
-    driverId:24,
-
+    driverId: null,
     userInfo: null,
-    nowLocation:'广东工业大学',
-    disCampus:'广东工业大学生活西区',
-    campus:'广东工业大学生活西区',
-    disName:''
+    disCampus: '',
+    disName: '',
   }
 })

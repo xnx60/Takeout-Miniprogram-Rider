@@ -1,71 +1,108 @@
-// pages/personPage.js
+import {
+  totast,
+  STATUS_CODE_infoSum_SUCCESSE,
+  STATUS_CODE_selectAllCampusName_SUCCESSE
+} from '../../service/config'
+import {
+  selectAllCampus,
+  infoSum,
+  getDriverInfo,
+} from '../../service/infoSum'
+const app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    disCampus: '',
+    disName: '',
+    disGender:2,
+    campusInfo: [],
+    campusNameList: [],
+    campusIndex: null
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
+  onLoad() {
+    const id = wx.getStorageSync('id')
 
+    this._getDriverInfo(id)
+    this._selectAllCampus()
   },
 
-  btn(){
-    wx.navigateBack({
-      delta: 1,
+  PickerCampus(e) {
+    const disCampus = this.data.campusNameList[e.detail.value]
+    const campusIndex = e.detail.value
+    this.setData({
+      campusIndex,
+      disCampus
+    })
+    // wx.setStorageSync('campus', disCampus)
+  },
+  isPerserve(){
+    wx.showModal({
+      content: '是否保存信息',
+      success: (res) => {
+        if (res.confirm) {
+          const id = wx.getStorageSync('id')
+          this._infoSum(this.data.disCampus,this.data.disName,this.data.disGender,id)
+        } else{
+          wx.navigateBack({
+            delta: 1
+          })
+        }
+      }
     })
   },
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
+  _selectAllCampus() {
+    selectAllCampus().then(res => {
+      // console.log(res);
+      if (res.data.code == STATUS_CODE_selectAllCampusName_SUCCESSE) {
+        const campusInfo = res.data.data
+        const campusNameList = this.data.campusNameList
+        for (let i in campusInfo) {
+          // console.log(campusInfo[i].campusName);         
+          campusNameList.push(campusInfo[i].campusName)
+        }
+        // console.log(res);
+        this.setData({
+          campusInfo,
+          campusNameList
+        })
+      } else {
+        totast('校区查询失败')
+      }
+    })
+  },
+
+  _getDriverInfo(driverId) {
+    getDriverInfo(driverId).then(res => {     
+      const disCampus = res.data.data.disCampus
+      const disName = res.data.data.driverName
+      const disGender=res.data.data.driverGender
+      this.setData({
+        disCampus,
+        disName,
+        disGender
+      })
+    })
+  },
+
+  _infoSum(disCampus,disName,driverGender,driverId){     
+    infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+      if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
+        wx.navigateBack({
+          delta: 1
+        })
+      } else{
+        totast(res.data.msg)
+      }
+    }).catch(reject=>{
+      totast('保存失败，请重试')
+    })
 
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
 
-  },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

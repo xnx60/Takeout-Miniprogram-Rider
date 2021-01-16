@@ -4,9 +4,13 @@
       <text class="cuIcon-back"></text>
       <slot name="backText"></slot>
     </view>
+    <view class=" action" wx:if="{{isPerserve}}">
+      <text class="cuIcon-back"></text>
+      <slot name="perserveText"></slot>
+    </view>
 
     <view class=" text-xxl margin-left-xs" wx:if="{{isMore}}" bindtap="showMore">
-      <text class="cuIcon-add"></text>
+      <text class="cuIcon-sort"></text>
       <slot name="backText"></slot>
     </view>
 

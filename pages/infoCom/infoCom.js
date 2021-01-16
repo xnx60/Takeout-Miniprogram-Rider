@@ -1,7 +1,5 @@
 import {
   totast,
-  API_URL_infoSum,
-  BASE_URL,
   STATUS_CODE_infoSum_SUCCESSE,
   STATUS_CODE_selectAllCampusName_SUCCESSE
 }from '../../service/config'
@@ -18,13 +16,14 @@ Page({
   data: {
     disCampus:app.globalData.disCampus,
     disName:'',
-    campusInfo:[],
+    campusInfo:[], 
     campusNameList:[],
     genderPicker:['男','女'],
     genderIndex:null,
     campusIndex:null
   },
   onLoad(){
+    
     this._selectAllCampus()
   },
 
@@ -50,6 +49,7 @@ Page({
     this.setData({
       disName:e.detail.value
     }) 
+    app.globalData.disName=disName
 },
 
   infoSum(){
@@ -87,6 +87,7 @@ Page({
           campusInfo,
           campusNameList
         })
+        app.globalData.campusNameList=campusNameList
       } else{
         totast('校区查询失败')
       }

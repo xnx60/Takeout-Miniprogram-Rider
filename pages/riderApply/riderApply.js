@@ -109,14 +109,14 @@ Page({
     const campusCard=returnUrlList.campusCard || null
     const stuIdCard=returnUrlList.stuIdCard || null
     loading('正在上传')
-    submitProve(23,idCardR,idCardB,campusCard,stuIdCard).then(res=>{
+    submitProve(driverId,idCardR,idCardB,campusCard,stuIdCard).then(res=>{
       hideLoading()
       console.log(res);     
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
         totast('提交成功')
-      // wx.redirectTo({
-      //   url: '',
-      // })        
+      wx.redirectTo({
+        url: '/pages/home/home',
+      })        
       } else if (res.data.code==1500){
         totast(res.data.msg)
       }    
