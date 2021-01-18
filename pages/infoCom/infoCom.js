@@ -1,7 +1,7 @@
 import {
   totast,
   STATUS_CODE_infoSum_SUCCESSE,
-  STATUS_CODE_selectAllCampusName_SUCCESSE
+  STATUS_CODE_selectAllCampusName_SUCCESSE, loading, hideLoading
 }from '../../service/config'
 import {
   selectAllCampus,
@@ -20,7 +20,8 @@ Page({
     campusNameList:[],
     genderPicker:['男','女'],
     genderIndex:null,
-    campusIndex:null
+    campusIndex:null,
+    flag:null
   },
   onLoad(){
     
@@ -45,26 +46,47 @@ Page({
     })
   },
 
-  getInputName(e){   
+  getInputName(e){ 
+    const reg=/[\u4e00-\u9fa5]/  
+    const disName=e.detail.value
+    const oldFlag=this.data.flag
+    const flag=reg.test(disName)
+    // console.log(flag); 
     this.setData({
-      disName:e.detail.value
+      flag
+    })   
+    if(!flag&&disName){
+      totast('格式不正确')
+    }
+    this.setData({
+      disName      
     }) 
+    // console.log(this.data.disName);   
     app.globalData.disName=disName
 },
 
   infoSum(){
    const driverId= wx.getStorageSync('id')
-    this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+   const flag=this.data.flag
+    if(flag){
+      this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+    }else{
+      totast('名字格式不正确')
+    }
+
+
   },
 
-  _infoSum(disCampus,disName,driverGender,driverId){     
+  _infoSum(disCampus,disName,driverGender,driverId){ 
+    loading('提交中')    
     infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+      hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
         wx.redirectTo({
           url: '/pages/riderApply/riderApply',
         })
       } else if(res.data.code==1500){
-        totast(res.data.msg)
+        totast('请把信息补充完整')
       }
     }).catch(reject=>{
       totast('提交失败，请重试')

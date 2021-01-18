@@ -60,7 +60,7 @@ Page({
             wx.setStorageSync('id', res.data.data.driverId)
             wx.setStorageSync('token', res.data.data.driverToken)
             const driverId = wx.getStorageSync('id')
-            app.globalData.disCampus = driverId
+            // app.globalData.disCampus = driverId
             this._checkLoginStatus(driverId)
           } else if (res.data.code == 1500) {
             // 传入参数为空  
@@ -79,8 +79,7 @@ Page({
 
   _checkLoginStatus(driverId) {
     checkLoginStatus(driverId).then(res => {
-      console.log(driverId); //24  
-      console.log(res);
+      console.log(res,'checkLogin');
       if (res.data.code == 2508) {
         // 骑手还没上传证明材料
         wx.redirectTo({
@@ -93,6 +92,7 @@ Page({
         })
       } else if (res.data.code == 2551) {
         // 审核通过
+        app.onShow()
         wx.redirectTo({
           url: '/pages/home/home',
         })

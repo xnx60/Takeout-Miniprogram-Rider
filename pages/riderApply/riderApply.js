@@ -57,47 +57,57 @@ Page({
       sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
       sourceType: ['album', 'camera'], //从相册选择
       success: (res) => {
+        // console.log(res.tempFilePaths[0]);       
         const localUrl= res.tempFilePaths[0]             
-          this.setData({
-            [imgUrl]: localUrl
-          })
-          wx.uploadFile({
-            url:  BASE_URL+API_URL_updatePhoto, 
-            filePath: localUrl,
-            name: 'file',
-            header:{
-              'content-type':'multipart/form-data',
-            },
-            formData: {
-              name: type
-            },      
-            success (res){             
-              loading('正在上传')
-              // console.log(res);
-              const data = JSON.parse(res.data)　
-              console.log(data);              
-              if(data.code==STATUS_CODE_updatePhoto_SUCCESSE){
-                totast(data.msg)
-                const returnUrlItem=data.data.url
-                const returnNameItem=data.data.name
-                let returnUrl=_this.data.returnUrlList
-                for (let key in returnUrl){
-                  if(key==returnNameItem){
-                    returnUrl[key]=returnUrlItem
-                  }
-                }
-                console.log(returnUrl);              
-              }  else {
-                totast(data.msg)
-              }       
-            },
-            fail (reject){
-              console.log(reject);             
-              totast('系统出错，请重试')      
-            },
-          })
+        this.setData({
+          [imgUrl]: localUrl
+         })
+        // console.log(this.data.imgList.idCardR.url);        
+        this.updatePhoto()          
       }
     });
+  },
+
+  /*
+  **
+  单张图片上传
+  */
+  updatePhoto(){
+    wx.uploadFile({
+      url:  BASE_URL+API_URL_updatePhoto, 
+      filePath: localUrl,
+      name: 'file',
+      header:{
+        'content-type':'multipart/form-data',
+      },
+      formData: {
+        name: type
+      },      
+      success (res){             
+        hideLoading()
+        // console.log(res);
+        const data = JSON.parse(res.data)　
+        // console.log(data);              
+        if(data.code==STATUS_CODE_updatePhoto_SUCCESSE){
+          totast(data.msg)
+          const returnUrlItem=data.data.url
+          const returnNameItem=data.data.name
+          let returnUrl=_this.data.returnUrlList
+          for (let key in returnUrl){
+            if(key==returnNameItem){
+              returnUrl[key]=returnUrlItem
+            }
+          }
+          console.log(returnUrl);              
+        }  else {
+          totast(data.msg)
+        }       
+      },
+      fail (reject){
+        // console.log(reject);             
+        totast('系统出错，请重试')      
+      },
+    })
   },
   infoSub(){
     this._submitProve(this.data.returnUrlList)
@@ -110,8 +120,7 @@ Page({
     const stuIdCard=returnUrlList.stuIdCard || null
     loading('正在上传')
     submitProve(driverId,idCardR,idCardB,campusCard,stuIdCard).then(res=>{
-      hideLoading()
-      console.log(res);     
+      hideLoading()  
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
         totast('提交成功')
       wx.redirectTo({

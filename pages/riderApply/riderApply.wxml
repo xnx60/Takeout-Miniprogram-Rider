@@ -8,7 +8,7 @@
 		<view class="flex justify-between margin-lr">
 			<view class="padding-sm margin-xs radius ">
 				<!-- 图片 -->
-				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardR.url}}" wx:if="{{imgList.idCardR.url}}"></image>
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardR.url}}" wx:if="{{imgList.idCardR.url}}" data-type="{{imgList.idCardR.label}}"></image>
 				<!-- 添加图片 -->
 				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.idCardR.label}}" wx:else>
 					<view class="text-center padding-lg  margin-top">
@@ -18,7 +18,7 @@
 				<view class="margin-top padding-left-xs">{{imgList.idCardR.name}}</view>			
 			</view>
 			<view class="padding-sm margin-xs radius">
-				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardB.url}}" wx:if="{{imgList.idCardB.url}}"></image>
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.idCardB.url}}" wx:if="{{imgList.idCardB.url}}" data-type="{{imgList.idCardB.label}}"></image>
 				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.idCardB.label}}" wx:else>
 					<view class="text-center padding-lg  margin-top">
 						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
@@ -29,7 +29,7 @@
 		</view>
 		<view class="flex justify-between margin-lr">
 			<view class="padding-sm margin-xs radius">
-				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.campusCard.url}}" wx:if="{{imgList.campusCard.url}}"></image>
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.campusCard.url}}" wx:if="{{imgList.campusCard.url}}" data-type="{{imgList.campusCard.label}}"></image>
 				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.campusCard.label}}" wx:else>
 					<view class="text-center padding-lg  margin-top">
 						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>
@@ -38,7 +38,7 @@
 				<view class="margin-top padding-left-lg">{{imgList.campusCard.name}}</view>			
 			</view>
 			<view class="padding-sm margin-xs radius">
-				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.stuIdCard.url}}" wx:if="{{imgList.stuIdCard.url}}"></image>
+				<image class="radius bg-black" style="width:150rpx;height:150rpx" catchtap="ChooseImage" src="{{imgList.stuIdCard.url}}" wx:if="{{imgList.stuIdCard.url}}" data-type="{{imgList.stuIdCard.label}}"></image>
 				<view class="solids" style="width:150rpx;height:150rpx" catchtap="ChooseImage" data-type="{{imgList.stuIdCard.label}}" wx:else>
 					<view class="text-center padding-lg  margin-top">
 						<text class="cuIcon-cameraadd" style="font-size:58rpx"></text>

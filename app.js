@@ -4,6 +4,9 @@ import {
   hideLoading,
   WEB_SOCKET_URL
 } from './service/config'
+import {
+  getDriverInfo
+}from './service/infoSum'
 import bus from './utils/bus'
 const TOKEN = 'token'
 
@@ -62,7 +65,8 @@ App({
       },
     })
   },
-  onShow() {
+  async onShow() {
+    await this._getDriverInfo()
     this.wsConnect()
   },
   async wsConnect() {
@@ -97,6 +101,7 @@ App({
     })
   },
   wsSend() {
+    console.log(wx.getStorageSync('campus'),'send');
     wx.sendSocketMessage({
       data: JSON.stringify({
         rid: wx.getStorageSync('id'),
@@ -118,6 +123,14 @@ App({
   wsClose() {
     wx.onSocketClose((result) => {
       console.log('close', result);
+      
+    })
+  },
+   _getDriverInfo() {
+     console.log('getCampus');
+     getDriverInfo(wx.getStorageSync('id')).then(res => {     
+       console.log('hadCampus',res);
+      wx.setStorageSync('campus', res.data.data.disCampus  )
     })
   },
   globalData: {

@@ -114,22 +114,23 @@ Page({
     // 获取校区
     const driverId=wx.getStorageSync('id')
     await this._getDriverInfo(driverId)
-
     await this._getOrdersDetail(1)
     await this._getOrdersDetail(2)
     await this._getOrdersDetail(3)
 
     bus.on('orderDataChange', (parseData) => {
-      console.log(parseData,'bus.on')
+      console.log(parseData,'bus.on--------1')
       const newOrders=parseData.data
       const orderLists=this.data.orders.orderLists.lists
-      console.log(orderLists);
+      orderLists.unshift(newOrders)
       const newOrderList = `orders.orderLists.lists`
-      // orderLists.push(newOrders)
       this.setData({
         [newOrderList]:orderLists
       })
     })
+  },
+  onHide(){
+    bus.remove('orderDataChange')
   },
   updateList() {
     const token = wx.getStorageSync(TOKEN)
@@ -147,7 +148,7 @@ Page({
 
   /*订单列表*/
   _getOrdersDetail(status) {
-    console.log(this.data.disCampus);
+    // console.log(this.data.disCampus);
 
     const driverId=wx.getStorageSync('id')
 
@@ -403,6 +404,7 @@ Page({
 
   async _getDriverInfo(driverId) {
     await getDriverInfo(driverId).then(res => {     
+      wx.setStorageSync('campus', res.data.data.disCampus  )
       const disCampus = res.data.data.disCampus     
       this.setData({
         disCampus
