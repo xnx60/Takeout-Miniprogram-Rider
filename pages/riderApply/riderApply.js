@@ -63,7 +63,7 @@ Page({
           [imgUrl]: localUrl
          })
         // console.log(this.data.imgList.idCardR.url);        
-        this.updatePhoto()          
+        this.updatePhoto(localUrl,type)          
       }
     });
   },
@@ -72,7 +72,8 @@ Page({
   **
   单张图片上传
   */
-  updatePhoto(){
+  updatePhoto(localUrl,type){
+    const _this=this 
     wx.uploadFile({
       url:  BASE_URL+API_URL_updatePhoto, 
       filePath: localUrl,
@@ -109,16 +110,20 @@ Page({
       },
     })
   },
+
   infoSub(){
     this._submitProve(this.data.returnUrlList)
   },
+
   _submitProve(returnUrlList){
+    console.log(returnUrlList);
+    
     const driverId=wx.getStorageSync('id')
     const idCardR=returnUrlList.idCardR || null
     const idCardB=returnUrlList.idCardB || null
     const campusCard=returnUrlList.campusCard || null
     const stuIdCard=returnUrlList.stuIdCard || null
-    loading('正在上传')
+    // loading('正在上传')
     submitProve(driverId,idCardR,idCardB,campusCard,stuIdCard).then(res=>{
       hideLoading()  
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
