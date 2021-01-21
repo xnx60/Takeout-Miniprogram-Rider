@@ -15,7 +15,7 @@
           <view  class="margin-left text-cut" style="width: 400rpx;" bindtap="showShopAddress">
             <text>{{item.shopAddress}}</text>
           </view>
-          <view class="cuIcon-phone lg text-xsl solid-left line-black padding-left" bindtap="callShop" data-phoneNum="{{item.businessPhone}}"></view>
+          <view class="cuIcon-phone lg text-xsl solid-left line-black padding-left" bindtap="phoneCall" data-phoneNum="{{item.businessPhone}}"></view>
         </view>
       </view>
     </view>
@@ -54,7 +54,7 @@
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:140rpx">用户备注</view>
-    <view class="flex-sub text-df text-grey">{{item.remarks}}</view>
+    <view class="flex-sub text-df text-grey text-right">{{item.remarks}}</view>
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:200rpx">订单起始时间</view>
@@ -75,7 +75,7 @@
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:250rpx">收货人电话号码</view>
-    <view class="flex-sub text-df text-grey text-right text-cyon" bindtap="callShop" data-phoneNum="{{item.userPhone}}">{{item.userPhone}}
+    <view class="flex-sub text-df text-grey text-right text-cyon" bindtap="phoneCall" data-phoneNum="{{item.userPhone}}">{{item.userPhone}}
     </view>
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
@@ -92,7 +92,7 @@
 <view class="cu-modal bottom-modal {{showBottomDialog?'show':''}}">
   <view class="cu-dialog">
     <view class="padding-xl bg-white margin-bottom text-cyan" bindtap="confirmCall" wx:if="{{telephoneNumber}}">{{telephoneNumber}}</view>
-    <view class="padding-xl bg-white margin-bottom" wx:else><text class="cuIcon-dianhua text-cyan margin-right-sm"></text>{{PhoneName}}</view>
+    <view class="padding-xl bg-white margin-bottom" wx:else bindtap="dialOut"><text class="cuIcon-dianhua text-cyan margin-right-sm"></text></view>
     <view class="padding-xl" bindtap="hiddenBottomDialog">取消</view>
   </view>
 </view>

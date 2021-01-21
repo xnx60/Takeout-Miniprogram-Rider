@@ -47,7 +47,7 @@ Page({
   },
 
   getInputName(e){ 
-    const reg=/[\u4e00-\u9fa5]/  
+    const reg= /^(?:[\u4e00-\u9fa5·]{2,6})$/
     const disName=e.detail.value
     const oldFlag=this.data.flag
     const flag=reg.test(disName)
@@ -55,7 +55,7 @@ Page({
     this.setData({
       flag
     })   
-    if(!flag&&disName){
+    if(!reg.test(disName) || !disName.trim()){
       totast('格式不正确')
     }
     this.setData({
@@ -69,7 +69,14 @@ Page({
    const driverId= wx.getStorageSync('id')
    const flag=this.data.flag
     if(flag){
-      this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+      wx.showModal({
+        content: '是否确认提交信息',
+        success: (res) => {
+          if (res.confirm) {
+            this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+          }
+        }
+      })
     }else{
       totast('名字格式不正确')
     }

@@ -7,7 +7,7 @@ import {
   TOKEN,
   hideLoading,
   loading
-}from '../../service/config'
+} from '../../service/config'
 import {
   checkLoginStatus
 } from '../../service/login'
@@ -25,6 +25,7 @@ Page({
   data: {
     disCampus: '',
     telephoneNumber: 1234567,
+    phoneNumber:1234555,
     orders: {
       orderLists: {
         page: 1,
@@ -51,7 +52,7 @@ Page({
           userName: 'CAT111工作室',
           userPhone: '18236978456'
         } */
-      ]
+        ]
       },
       goodsLists: {
         page: 1,
@@ -72,7 +73,8 @@ Page({
           totalQuantity: 5,
           userName: 'CAT222工作室',
           userPhone: '18236978456'
-        } */]
+        } */
+        ]
       },
       deliveryLists: {
         page: 1,
@@ -92,56 +94,57 @@ Page({
           totalQuantity: 5,
           userName: 'CAT333工作室',
           userPhone: '18236978456'
-        } */]
+        } */
+        ]
       }
     },
     index: 0,
     isShow: false,
     showBottomDialog: false
   },
-  onLoad(){
+  onLoad() {
 
-    
+
   },
   async onShow() {
     //判断登录注册状态
     const token = wx.getStorageSync(TOKEN)
     const id = wx.getStorageSync('id')
-    if(token&&id){
+    if (token && id) {
       this._checkLoginStatus(id)
     }
 
     // 获取校区
-    const driverId=wx.getStorageSync('id')
+    const driverId = wx.getStorageSync('id')
     await this._getDriverInfo(driverId)
     await this._getOrdersDetail(1)
     await this._getOrdersDetail(2)
     await this._getOrdersDetail(3)
 
     bus.on('orderDataChange', (parseData) => {
-      console.log(parseData,'bus.on--------1')
-      const newOrders=parseData.data
-      const orderLists=this.data.orders.orderLists.lists
+      console.log(parseData, 'bus.on--------1')
+      const newOrders = parseData.data
+      const orderLists = this.data.orders.orderLists.lists
       orderLists.unshift(newOrders)
       const newOrderList = `orders.orderLists.lists`
       this.setData({
-        [newOrderList]:orderLists
+        [newOrderList]: orderLists
       })
     })
   },
-  onHide(){
+  onHide() {
     bus.remove('orderDataChange')
   },
   updateList() {
     const token = wx.getStorageSync(TOKEN)
     const id = wx.getStorageSync('id')
-    if(!token&&!id){
+    if (!token && !id) {
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    }else{
-        // loading('刷新中')
-        this._getOrdersDetail(1)
+    } else {
+      // loading('刷新中')
+      this._getOrdersDetail(1)
     }
 
   },
@@ -150,12 +153,12 @@ Page({
   _getOrdersDetail(status) {
     // console.log(this.data.disCampus);
 
-    const driverId=wx.getStorageSync('id')
+    const driverId = wx.getStorageSync('id')
 
     const size = 11 //页面展示条数
     const type = status == 1 ? 'orderLists' : status == 2 ? 'goodsLists' : status == 3 ? 'deliveryLists' : 'endUpLists'
     const goods = this.data.orders[type]
-    const pageNum = goods.page  //页码
+    const pageNum = goods.page //页码
     const campus = status == 1 ? this.data.disCampus : null
     const riderId = status != 1 ? driverId : null
     getOrdersDetail(pageNum, size, status, campus, riderId).then(res => {
@@ -181,30 +184,13 @@ Page({
     })
   },
 
-  /*抢单*/
-  _getOrders(allId) {
-    const driverId=wx.getStorageSync('id')
-
-    const id = allId.id
-    const orderId = allId.orderId
-    const orderNumber = allId.orderNumber
-    const shopId = allId.shopId
-    const status = allId.status
-    const userId = allId.userId
-    getOrders(id, orderId, orderNumber,driverId, shopId, 1, userId).then(res => {
-      // console.log(res);
-      this._getOrdersDetail(1)
-      this._getOrdersDetail(2)
-    })
-  },
-  /**
+    /**
    * 抢单
    **/
   takeOrders(e) {
     // 获取页面订单相关信息
     const itemInfo = e.currentTarget.dataset.item
     // console.log(itemInfo);
-
     wx.showModal({
       content: '是否确认接收此订单',
       success: (res) => {
@@ -215,6 +201,23 @@ Page({
       }
     })
   },
+
+  /*抢单*/
+  _getOrders(allId) {
+    const driverId = wx.getStorageSync('id')
+    const id = allId.id
+    const orderId = allId.orderId
+    const orderNumber = allId.orderNumber
+    const shopId = allId.shopId
+    const status = allId.status
+    const userId = allId.userId
+    getOrders(id, orderId, orderNumber, driverId, shopId, 1, userId).then(res => {
+      // console.log(res);
+      this._getOrdersDetail(1)
+      this._getOrdersDetail(2)
+    })
+  },
+
   /**
    * 取货
    **/
@@ -244,18 +247,7 @@ Page({
         if (res.confirm) {
           this._updateOrderStatus(item, 7)
 
-          console.log('点击确定取货');
-          // const oldGoodsList=this.data.orders.goodsLists.lists         
-          // const newGoodsList=`orders.goodsLists.lists` 
-          // const oldDeliveryList=this.data.orders.deliveryLists.lists
-          // const newDeliveryList=`orders.deliveryLists.lists` 
-          // oldGoodsList.splice(index,1)
-          // oldDeliveryList.splice(1,0,item)
-
-          //  this.setData({
-          //    [newGoodsList]:oldGoodsList,
-          //    [newDeliveryList]:oldDeliveryList
-          //  })      
+          // console.log('点击确定取货');  
         }
       }
     })
@@ -274,7 +266,7 @@ Page({
       content: '是否确认接收此订单',
       success: (res) => {
         if (res.confirm) {
-          this._updateOrderStatus(item, 8)       
+          this._updateOrderStatus(item, 8)
         }
       }
     })
@@ -282,16 +274,7 @@ Page({
   /**
    * 页面监听函数
    */
-  callShop() {
-    this.setData({
-      showBottomDialog: true
-    })
-  },
-  hiddenBottomDialog() {
-    this.setData({
-      showBottomDialog: false
-    })
-  },
+
 
 
 
@@ -302,15 +285,15 @@ Page({
   },
   toProfile() {
     this.setData({
-      isShow:false
+      isShow: false
     })
     const token = wx.getStorageSync(TOKEN)
     const id = wx.getStorageSync('id')
-    if(!token&&!id){
+    if (!token && !id) {
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    }else{
+    } else {
       wx.navigateTo({
         url: '/pages/personPage/personPage'
       })
@@ -320,15 +303,15 @@ Page({
   },
   toHistory() {
     this.setData({
-      isShow:false
+      isShow: false
     })
     const token = wx.getStorageSync(TOKEN)
     const id = wx.getStorageSync('id')
-    if(!token&&!id){
+    if (!token && !id) {
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    }else{
+    } else {
       wx.navigateTo({
         url: '/pages/orderHistory/orderHistory'
       })
@@ -342,7 +325,7 @@ Page({
   },
 
   handleMore() {
-    console.log("展示弹窗");
+    // console.log("展示弹窗");
     const isShow = !this.data.isShow
     this.setData({
       isShow
@@ -351,9 +334,6 @@ Page({
 
   },
   showDetailPage(e) {
-    // console.log("展示订单详细信息");
-    // console.log(e);
-
 
     wx.navigateTo({
       url: '/pages/orderDetail/orderDetail?item=' + JSON.stringify(e.currentTarget.dataset.item)
@@ -370,9 +350,22 @@ Page({
     })
   },
   confirmCall() {
+    const phoneNumber=this.data.telephoneNumber
     this.setData({
-      telephoneNumber: null
+      telephoneNumber: null,
+      phoneNumber
     })
+  },
+  dialOut(){
+    const phoneNumber=this.data.phoneNumber
+    wx.makePhoneCall({
+      phoneNumber:phoneNumber,
+      success: res => {
+        this.setData({
+          showBottomDialog: false,
+        })
+      },
+    })  
   },
   hiddenBottomDialog() {
     this.setData({
@@ -380,12 +373,17 @@ Page({
     })
   },
 
+
+
+  /* 
+  检测登录状态
+  */
   _checkLoginStatus(driverId) {
     checkLoginStatus(driverId).then(res => {
       // console.log(driverId)  
       // console.log(res);
       // console.log(res.data.code);
-      
+
       if (res.data.code == 2508) {
         // 骑手还没上传证明材料
         wx.redirectTo({
@@ -394,18 +392,21 @@ Page({
       } else if (res.data.code == 2550 || res.data.code == 2552) {
         // 骑手正在审核/审核未通过
         console.log('跳转前');
-        
+
         wx.redirectTo({
           url: '/pages/examPage/examPage?status=' + JSON.stringify(res.data.code)
         })
-      } 
+      }
     })
   },
 
+  /* 
+  获取骑手信息
+  */
   async _getDriverInfo(driverId) {
-    await getDriverInfo(driverId).then(res => {     
-      wx.setStorageSync('campus', res.data.data.disCampus  )
-      const disCampus = res.data.data.disCampus     
+    await getDriverInfo(driverId).then(res => {
+      wx.setStorageSync('campus', res.data.data.disCampus)
+      const disCampus = res.data.data.disCampus
       this.setData({
         disCampus
       })

@@ -3,7 +3,6 @@
     "pages/home/home",
     "pages/orderHistory/orderHistory",
     "pages/personPage/personPage",
-    "pages/position/position",
     "pages/riderApply/riderApply",
     "pages/orderDetail/orderDetail",
     "pages/login/login",

@@ -1,5 +1,6 @@
-<cu-custom bgColor="bg-cyan">
-  <text slot="content">信息完善</text>
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">信息补充</text>
 </cu-custom>
 
 <view class="cu-form-group">

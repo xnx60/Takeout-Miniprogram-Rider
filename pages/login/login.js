@@ -40,7 +40,6 @@ Page({
     })
   },
   getPhoneNum(e) {
-    loading('加载中')  
     if (e.detail.errMsg == 'getPhoneNumber:ok') {
       wx.request({
         url: BASE_URL + API_URL_login,
@@ -54,7 +53,6 @@ Page({
           encryptedData: e.detail.encryptedData
         },
         success: res => {
-          hideLoading()
           if (res.data.code == STATUS_CODE_login_SUCCESSE) {
             console.log('登录成功');
             wx.setStorageSync('id', res.data.data.driverId)

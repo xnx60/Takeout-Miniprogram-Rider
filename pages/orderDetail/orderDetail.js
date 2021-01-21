@@ -13,11 +13,17 @@ Page({
     showBottomDialog:false,
     showShopAddress: false,
     telephoneNumber: 123456789,
+    phoneNumber:123456,
     phoneName:null
     
   },
-  callShop(e) {
-    console.log(e);
+
+ /*
+ **
+ 电话呼叫
+ */
+phoneCall(e) {
+    // console.log(e);
     const phoneNum=e.currentTarget.dataset.phonenum
     this.setData({
       showBottomDialog: true,
@@ -25,9 +31,22 @@ Page({
     })
   },
   confirmCall(){
+    const phoneNumber=this.data.telephoneNumber
     this.setData({
-      telephoneNumber:null
+      telephoneNumber:null,
+      phoneNumber
     })
+  },
+  dialOut(){
+    const phoneNumber=this.data.phoneNumber
+    wx.makePhoneCall({
+      phoneNumber:phoneNumber,
+      success: res => {
+        this.setData({
+          showBottomDialog: false,
+        })
+      },
+    })   
   },
   hiddenBottomDialog() {
     this.setData({
@@ -35,6 +54,9 @@ Page({
     })
   },
 
+  /*
+  **店铺地址
+  */
   showShopAddress() {
     this.setData({
       showShopAddress: true

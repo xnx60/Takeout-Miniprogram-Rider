@@ -27,7 +27,7 @@
 
 <!-- 订单模块 -->
 <view class="order-module margin-bottom-xl" >
-    <view class="list-wait" wx:if="{{index == 0}}">
+    <view class="list-wait" wx:if="{{index == 0}}" style="margin-bottom:129rpx">
       <block wx:for="{{orders.orderLists.lists}}" wx:key="{{index}}">
         <view class="order-item">
           <view class="cu-card article {{isCard?'no-card':''}}">
@@ -141,7 +141,7 @@
 
                 <view class="cu-item text-red ">
                   <view class="content shadow-blur text-xl">
-                    首都xxxxxxxxxx
+                    {{item.deliveryAddress}}
                   </view>
                   <view class="content text-sm" >
                     <view class="text-center margin-right-sm">
@@ -175,11 +175,13 @@
 <view class="cu-modal bottom-modal {{showBottomDialog?'show':''}}">
   <view class="cu-dialog">
     <view class="padding-xl bg-white margin-bottom text-cyan" bindtap="confirmCall" wx:if="{{telephoneNumber}}">{{telephoneNumber}}</view>
-    <view class="padding-xl bg-white margin-bottom" wx:else><text class="cuIcon-dianhua text-cyan margin-right-sm"></text></view>
+    <view class="padding-xl bg-white margin-bottom" wx:else bindtap="dialOut"><text class="cuIcon-dianhua text-cyan margin-right-sm"></text></view>
     <view class="padding-xl" bindtap="hiddenBottomDialog">取消</view>
   </view>
 </view>
 <!-- <bottom-telephoneBar phoneNumber="{{telephoneNumber}}"></bottom-telephoneBar> -->
+
+<view class="text-center text-grey">———————— 没有更多了 ————————</view>
 
 
   
