@@ -6,7 +6,7 @@ import {
 import {
   TOKEN,
   hideLoading,
-  loading
+  loading, totast
 } from '../../service/config'
 import {
   checkLoginStatus
@@ -28,7 +28,7 @@ Page({
     phoneNumber:1234555,
     orders: {
       orderLists: {
-        page: 1,
+        pageNum: 1,
         isHasNextPage:null,
         lists: [
           /* {
@@ -56,7 +56,7 @@ Page({
         ]
       },
       goodsLists: {
-        page: 1,
+        pageNum: 1,
         isHasNextPage:null,
         lists: [
           /* {
@@ -79,7 +79,7 @@ Page({
         ]
       },
       deliveryLists: {
-        page: 1,
+        pageNum: 1,
         isHasNextPage:null,
         lists: [
           /* {
@@ -151,56 +151,50 @@ Page({
   },
 
   /*订单列表*/
-  _getOrdersDetail(status) {
+  async _getOrdersDetail(status) {
     // console.log(this.data.disCampus);
     const driverId = wx.getStorageSync('id')
     const size = 3//页面展示条数
     const type = status == 1 ? 'orderLists' : status == 2 ? 'goodsLists' : status == 3 ? 'deliveryLists' : 'endUpLists'
     const goods = this.data.orders[type]
-    const pageNum = goods.page //页码
+    const pageNum = goods.pageNum //页码
     const campus = status == 1 ? this.data.disCampus : null
     const riderId = status != 1 ? driverId : null
-    getOrdersDetail(pageNum, size, status, campus, riderId).then(res => {
-      console.log(res);
-      hideLoading
-      // 获取数据列表
-      const list = res.data.data.list
-      let oldList = goods.lists
-      oldList.push(...list)
-      goods.isHasNextPage=res.data.data.hasNextPage
-      // console.log(goods.isHasNextPage);
-      
-      // console.log(oldList);
-
-      const newList = `orders.${type}.lists`
-      // console.log(newList);
-
-      // 将获取的数据列表渲染
-      this.setData({
-        [newList]: oldList
+    let showList = []
+    for(let i=1;i<pageNum+1;i++){
+      const page=i
+      await getOrdersDetail(page, size, status, campus, riderId).then(res => {
+        // console.log(res);
+        hideLoading
+        // 获取数据列表
+        const itemList = res.data.data.list
+        showList.push(...itemList)
+        goods.isHasNextPage=res.data.data.hasNextPage
+      }).catch(res => {
+        totast('系统错误，请稍后重试')
       })
-    }).catch(res => {
-      console.log(res);
-
-      // console.log('请求失败');
+    }
+    const newList = `orders.${type}.lists`
+    let oldList = goods.lists
+    oldList=showList
+    this.setData({
+      [newList]: oldList
     })
   },
 
- onReachBottom: function () {
-    
+ onReachBottom: function () {   
     const index=this.data.index
     const type=index==0?'orderLists':index==1?'goodsLists':'deliveryLists'
     const status=index+1
     console.log('加载更多');
-    console.log(type);
-    
+    // console.log(type);  
     const goods = this.data.orders[type]
     const isHasNextPage=goods.isHasNextPage
     if(isHasNextPage){
       this.setData({
         isHideLoadMore:true
       })
-      goods.page++
+      goods.pageNum++
       this._getOrdersDetail(status)
     } else{
       this.setData({
@@ -248,20 +242,6 @@ Page({
   /**
    * 取货
    **/
-  _updateOrderStatus(item, status) {
-    const id = item.id
-    const shopId = item.shopId
-    const orderNumber = item.orderNumber
-    const orderId = item.orderId
-    const userId = status == 8 ? item.userId : null
-    updateOrderStatus(id, orderId, orderNumber, shopId, status, userId).then(res => {
-      if (status == 7) {
-        this._getOrdersDetail(2)
-      }
-      this._getOrdersDetail(3)
-    })
-  },
-
   takeGoods(e) {
     // console.log(e);
     // 获取抢单的索引
@@ -298,35 +278,41 @@ Page({
       }
     })
   },
+
+    // 更新订单状态
+    _updateOrderStatus(item, status) {
+      const id = item.id
+      const shopId = item.shopId
+      const orderNumber = item.orderNumber
+      const orderId = item.orderId
+      const userId = status == 8 ? item.userId : null
+      updateOrderStatus(id, orderId, orderNumber, shopId, status, userId).then(res => {
+        if (status == 7) {
+          this._getOrdersDetail(2)
+        }
+        this._getOrdersDetail(3)
+      })
+    },
+
   /**
    * 页面监听函数
    */
-
-
-
-
   handleEmitIndex(e) {
     this.setData({
       index: e.detail
     })
   },
-  toProfile() {
+
+  /* 
+  更多部分 
+  */
+  handleMore() {
+    // console.log("展示弹窗");
+    const isShow = !this.data.isShow
     this.setData({
-      isShow: false
+      isShow
     })
-    const token = wx.getStorageSync(TOKEN)
-    const id = wx.getStorageSync('id')
-    if (!token && !id) {
-      wx.navigateTo({
-        url: '/pages/login/login'
-      })
-    } else {
-      wx.navigateTo({
-        url: '/pages/personPage/personPage'
-      })
-    }
-
-
+    console.log(this.data.isShow);
   },
   toHistory() {
     this.setData({
@@ -343,25 +329,26 @@ Page({
         url: '/pages/orderHistory/orderHistory'
       })
     }
-
   },
-  toApply() {
-    wx.navigateTo({
-      url: '/pages/riderApply/riderApply'
-    })
-  },
-
-  handleMore() {
-    // console.log("展示弹窗");
-    const isShow = !this.data.isShow
+  toProfile() {
     this.setData({
-      isShow
+      isShow: false
     })
-    console.log(this.data.isShow);
-
+    const token = wx.getStorageSync(TOKEN)
+    const id = wx.getStorageSync('id')
+    if (!token && !id) {
+      wx.navigateTo({
+        url: '/pages/login/login'
+      })
+    } else {
+      wx.navigateTo({
+        url: '/pages/personPage/personPage'
+      })
+    }
   },
-  showDetailPage(e) {
 
+  /* 订单细节 */
+  showDetailPage(e) {
     wx.navigateTo({
       url: '/pages/orderDetail/orderDetail?item=' + JSON.stringify(e.currentTarget.dataset.item)
     })
@@ -433,7 +420,7 @@ Page({
   async _getDriverInfo(driverId) {
     await getDriverInfo(driverId).then(res => {
       wx.setStorageSync('campus', res.data.data.disCampus)
-      const disCampus = res.data.data.disCampus
+      const disCampus = res.data.data.campusName
       this.setData({
         disCampus
       })

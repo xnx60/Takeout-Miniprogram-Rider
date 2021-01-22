@@ -12,6 +12,7 @@ const TOKEN = 'token'
 
 App({
   onLaunch: function () {
+    
     this.globalData.bus = bus
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -66,6 +67,7 @@ App({
     })
   },
   async onShow() {
+    
     await this._getDriverInfo()
     this.wsConnect()
   },
@@ -127,7 +129,6 @@ App({
     })
   },
    _getDriverInfo() {
-     console.log('getCampus');
      getDriverInfo(wx.getStorageSync('id')).then(res => {     
        console.log('hadCampus',res);
       wx.setStorageSync('campus', res.data.data.disCampus  )
