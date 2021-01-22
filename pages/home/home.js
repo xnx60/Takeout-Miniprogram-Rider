@@ -29,6 +29,7 @@ Page({
     orders: {
       orderLists: {
         page: 1,
+        isHasNextPage:null,
         lists: [
           /* {
           id: 29,
@@ -56,6 +57,7 @@ Page({
       },
       goodsLists: {
         page: 1,
+        isHasNextPage:null,
         lists: [
           /* {
           businessPhone: '18856237412',
@@ -78,6 +80,7 @@ Page({
       },
       deliveryLists: {
         page: 1,
+        isHasNextPage:null,
         lists: [
           /* {
           businessPhone: '18856237412',
@@ -100,11 +103,9 @@ Page({
     },
     index: 0,
     isShow: false,
-    showBottomDialog: false
-  },
-  onLoad() {
-
-
+    showBottomDialog: false,
+    isHiddenMore:false,
+    isHideLoadMore:false
   },
   async onShow() {
     //判断登录注册状态
@@ -152,22 +153,23 @@ Page({
   /*订单列表*/
   _getOrdersDetail(status) {
     // console.log(this.data.disCampus);
-
     const driverId = wx.getStorageSync('id')
-
-    const size = 11 //页面展示条数
+    const size = 3//页面展示条数
     const type = status == 1 ? 'orderLists' : status == 2 ? 'goodsLists' : status == 3 ? 'deliveryLists' : 'endUpLists'
     const goods = this.data.orders[type]
     const pageNum = goods.page //页码
     const campus = status == 1 ? this.data.disCampus : null
     const riderId = status != 1 ? driverId : null
     getOrdersDetail(pageNum, size, status, campus, riderId).then(res => {
-      // console.log(res);
+      console.log(res);
       hideLoading
       // 获取数据列表
       const list = res.data.data.list
       let oldList = goods.lists
-      oldList = list
+      oldList.push(...list)
+      goods.isHasNextPage=res.data.data.hasNextPage
+      // console.log(goods.isHasNextPage);
+      
       // console.log(oldList);
 
       const newList = `orders.${type}.lists`
@@ -183,6 +185,31 @@ Page({
       // console.log('请求失败');
     })
   },
+
+ onReachBottom: function () {
+    
+    const index=this.data.index
+    const type=index==0?'orderLists':index==1?'goodsLists':'deliveryLists'
+    const status=index+1
+    console.log('加载更多');
+    console.log(type);
+    
+    const goods = this.data.orders[type]
+    const isHasNextPage=goods.isHasNextPage
+    if(isHasNextPage){
+      this.setData({
+        isHideLoadMore:true
+      })
+      goods.page++
+      this._getOrdersDetail(status)
+    } else{
+      this.setData({
+        isHideLoadMore:false,
+        isHiddenMore:true
+      })
+    }
+  },
+
 
     /**
    * 抢单
