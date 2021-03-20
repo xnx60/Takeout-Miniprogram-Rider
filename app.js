@@ -32,10 +32,7 @@ App({
 
     const token = wx.getStorageSync(TOKEN)
     const id = wx.getStorageSync('id')
-
-
-
-
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -129,9 +126,9 @@ App({
     })
   },
    _getDriverInfo() {
-     getDriverInfo(wx.getStorageSync('id')).then(res => {     
+    getDriverInfo(wx.getStorageSync('id')).then(res => {     
        console.log('hadCampus',res);
-      wx.setStorageSync('campus', res.data.data.disCampus  )
+      wx.setStorageSync('campus', res.data.data.campusName  )
     })
   },
   globalData: {

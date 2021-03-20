@@ -1,7 +1,8 @@
 import {
   getOrders,
   getOrdersDetail,
-  updateOrderStatus
+  updateOrderStatus,
+  oncePaySharing
 } from '../../service/home'
 import {
   TOKEN,
@@ -23,6 +24,9 @@ Page({
    * 页面的初始数据
    */
   data: {
+    tabbarList:[
+      '待接单','待取货','待送达'
+    ],
     disCampus: '',
     telephoneNumber: 1234567,
     phoneNumber:1234555,
@@ -105,19 +109,28 @@ Page({
     isShow: false,
     showBottomDialog: false,
     isHiddenMore:false,
-    isHideLoadMore:false
+    isHideLoadMore:false,
+    // 检查骑手登录状态
+    driverLoginStatus:2508
   },
   async onShow() {
     //判断登录注册状态
-    const token = wx.getStorageSync(TOKEN)
+    const token = wx.getStorageSync('token')
     const id = wx.getStorageSync('id')
     if (token && id) {
       this._checkLoginStatus(id)
     }
-
-    // 获取校区
+    // 获取骑手信息(校区)
     const driverId = wx.getStorageSync('id')
-    await this._getDriverInfo(driverId)
+    const disCampus = wx.getStorageSync('campus')
+    this.setData({
+      disCampus
+    })
+    if(!disCampus){
+      console.log('缓存中校区为空，调用信息接口');    
+      await this._getDriverInfo(driverId)
+    }
+
     await this._getOrdersDetail(1)
     await this._getOrdersDetail(2)
     await this._getOrdersDetail(3)
@@ -143,15 +156,20 @@ Page({
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    } else {
+    } 
+    else if(this.data.driverLoginStatus==2508){
+      wx.navigateTo({
+        url: '/pages/riderApply/riderApply'
+      })
+    }else if(this.data.driverLoginStatus==2551){
       // loading('刷新中')
       this._getOrdersDetail(1)
     }
-
   },
 
   /*订单列表*/
   async _getOrdersDetail(status) {
+    loading('加载中')
     // console.log(this.data.disCampus);
     const driverId = wx.getStorageSync('id')
     const size = 3//页面展示条数
@@ -165,7 +183,7 @@ Page({
       const page=i
       await getOrdersDetail(page, size, status, campus, riderId).then(res => {
         // console.log(res);
-        hideLoading
+        hideLoading()
         // 获取数据列表
         const itemList = res.data.data.list
         showList.push(...itemList)
@@ -177,16 +195,19 @@ Page({
     const newList = `orders.${type}.lists`
     let oldList = goods.lists
     oldList=showList
-    this.setData({
-      [newList]: oldList
-    })
+    // 审核通过才可显示
+    if(this.data.driverLoginStatus==2551){
+      this.setData({
+        [newList]: oldList
+      })
+    }
   },
 
  onReachBottom: function () {   
     const index=this.data.index
     const type=index==0?'orderLists':index==1?'goodsLists':'deliveryLists'
     const status=index+1
-    console.log('加载更多');
+    // console.log('加载更多');
     // console.log(type);  
     const goods = this.data.orders[type]
     const isHasNextPage=goods.isHasNextPage
@@ -232,8 +253,9 @@ Page({
     const shopId = allId.shopId
     const status = allId.status
     const userId = allId.userId
+    loading('加载中')
     getOrders(id, orderId, orderNumber, driverId, shopId, 1, userId).then(res => {
-      // console.log(res);
+      hideLoading()
       this._getOrdersDetail(1)
       this._getOrdersDetail(2)
     })
@@ -253,8 +275,6 @@ Page({
       success: (res) => {
         if (res.confirm) {
           this._updateOrderStatus(item, 7)
-
-          // console.log('点击确定取货');  
         }
       }
     })
@@ -263,7 +283,7 @@ Page({
   /**
    * 待送达
    */
-  deliveryGoods(e) {
+  async deliveryGoods(e) {
     // console.log(e);
     // 获取抢单数据
     const index = e.currentTarget.dataset.index
@@ -273,26 +293,38 @@ Page({
       content: '是否确认接收此订单',
       success: (res) => {
         if (res.confirm) {
-          this._updateOrderStatus(item, 8)
+          this._updateOrderStatus(item, 8,(orderNumber, money,deliveryFee,shopId)=>{
+            oncePaySharing(orderNumber, money,deliveryFee,shopId).then(res=>{
+              if(res.data.code !== 3200){
+                totast('失败',2000)
+              }
+            })
+          })
         }
       }
     })
   },
 
-    // 更新订单状态
-    _updateOrderStatus(item, status) {
-      const id = item.id
-      const shopId = item.shopId
-      const orderNumber = item.orderNumber
-      const orderId = item.orderId
-      const userId = status == 8 ? item.userId : null
-      updateOrderStatus(id, orderId, orderNumber, shopId, status, userId).then(res => {
-        if (status == 7) {
-          this._getOrdersDetail(2)
-        }
-        this._getOrdersDetail(3)
-      })
-    },
+  // 更新订单状态
+  async _updateOrderStatus(item, status,callback) {
+    const totalAmount = item.totalAmount
+    const deliveryFee = item.deliveryFee
+    const id = item.id
+    const shopId = item.shopId
+    const orderNumber = item.orderNumber
+    const orderId = item.orderId
+    const userId = status == 8 ? item.userId : null
+    loading('加载中')
+    await updateOrderStatus(id, orderId, orderNumber, shopId, status, userId).then(res => {
+      hideLoading()
+      if (status == 7) {
+        this._getOrdersDetail(2) 
+      }   
+      this._getOrdersDetail(3)  
+    }).then(()=>{
+      callback(orderNumber, totalAmount,deliveryFee,shopId)
+    })
+  },
 
   /**
    * 页面监听函数
@@ -312,7 +344,7 @@ Page({
     this.setData({
       isShow
     })
-    console.log(this.data.isShow);
+    // console.log(this.data.isShow);
   },
   toHistory() {
     this.setData({
@@ -324,7 +356,11 @@ Page({
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    } else {
+    } else if(this.data.driverLoginStatus==2508){
+      wx.navigateTo({
+        url: '/pages/riderApply/riderApply'
+      })
+    }else if(this.data.driverLoginStatus==2551){
       wx.navigateTo({
         url: '/pages/orderHistory/orderHistory'
       })
@@ -340,11 +376,20 @@ Page({
       wx.navigateTo({
         url: '/pages/login/login'
       })
-    } else {
+    } else if(this.data.driverLoginStatus==2508){
+      wx.navigateTo({
+        url: '/pages/riderApply/riderApply'
+      })
+    }else if(this.data.driverLoginStatus==2551){
       wx.navigateTo({
         url: '/pages/personPage/personPage'
       })
     }
+  },
+  toParcelModule() {
+    wx.navigateTo({
+      url: '/pages/parcelModule/parcelPage/parcelPage'
+    })
   },
 
   /* 订单细节 */
@@ -394,19 +439,20 @@ Page({
   */
   _checkLoginStatus(driverId) {
     checkLoginStatus(driverId).then(res => {
-      // console.log(driverId)  
-      // console.log(res);
-      // console.log(res.data.code);
-
+      wx.setStorageSync('driverStatus', res.data.code)
+      this.setData({
+        driverLoginStatus:res.data.code
+      })
+      console.log(wx.getStorageSync('driverStatus'),'登录状态');
+       
       if (res.data.code == 2508) {
         // 骑手还没上传证明材料
         wx.redirectTo({
-          url: '/pages/infoCom/infoCom',
+          url: '/pages/riderApply/riderApply',
         })
-      } else if (res.data.code == 2550 || res.data.code == 2552) {
-        // 骑手正在审核/审核未通过
+      } else if (res.data.code == 2550 || res.data.code == 2552 || res.data.code==2553) {
+        // 骑手正在审核/审核未通过/封禁
         console.log('跳转前');
-
         wx.redirectTo({
           url: '/pages/examPage/examPage?status=' + JSON.stringify(res.data.code)
         })
@@ -419,7 +465,7 @@ Page({
   */
   async _getDriverInfo(driverId) {
     await getDriverInfo(driverId).then(res => {
-      wx.setStorageSync('campus', res.data.data.disCampus)
+      wx.setStorageSync('campus', res.data.data.campusName)
       const disCampus = res.data.data.campusName
       this.setData({
         disCampus

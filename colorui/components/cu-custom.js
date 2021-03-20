@@ -54,7 +54,7 @@ Component({
   methods: {
     BackPage() {
       wx.navigateBack({
-        delta: 1
+        delta: 8
       });
     },
     toHome(){

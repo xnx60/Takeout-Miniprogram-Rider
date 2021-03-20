@@ -21,8 +21,6 @@ export function hideLoading(){
     wx.hideLoading()
 }
 
-export const TOKEN='token'
-
 
 /**
  * 配置网络请求相关的常量
@@ -72,6 +70,8 @@ export const API_URL_selectOrderHistory = '/order/selectRiderOrderHistory'
 export const API_URL_getSaleHistory = '/data/getRiderSaleHistory'
 export const API_URL_getOrderHistory = '/order/selectRiderOrderHistory'
 export const API_URL_getDriverInfo = '/driverinfo/selectById'
+
+export const API_URL_oncePaySharing = '/wechatpay/oncePaySharing'
 
 
 

@@ -35,8 +35,6 @@ Page({
       campusIndex,
       disCampus
     })
-    wx.setStorageSync('campus', disCampus)
-    app.globalData.disCampus=disCampus
   },
 
   PickerGender(e) {
@@ -89,6 +87,8 @@ Page({
     infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
+        wx.setStorageSync('campus', this.data.disCampus)
+        app.globalData.disCampus=this.data.disCampus
         wx.redirectTo({
           url: '/pages/riderApply/riderApply',
         })

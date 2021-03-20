@@ -7,7 +7,8 @@
     "pages/orderDetail/orderDetail",
     "pages/login/login",
     "pages/infoCom/infoCom",
-    "pages/examPage/examPage"
+    "pages/examPage/examPage",
+    "pages/parcelModule/parcelPage/parcelPage"
   ],
   "window": {
     "navigationStyle": "custom"

@@ -41,6 +41,7 @@ Page({
   },
   getPhoneNum(e) {
     if (e.detail.errMsg == 'getPhoneNumber:ok') {
+      loading('加载中')
       wx.request({
         url: BASE_URL + API_URL_login,
         method: 'POST',
@@ -53,6 +54,7 @@ Page({
           encryptedData: e.detail.encryptedData
         },
         success: res => {
+          hideLoading()
           if (res.data.code == STATUS_CODE_login_SUCCESSE) {
             console.log('登录成功');
             wx.setStorageSync('id', res.data.data.driverId)
@@ -83,8 +85,8 @@ Page({
         wx.redirectTo({
           url: '/pages/infoCom/infoCom',
         })
-      } else if (res.data.code == 2550 || res.data.code == 2552) {
-        // 骑手正在审核/审核未通过
+      } else if (res.data.code == 2550 || res.data.code == 2552|| res.data.code == 2553) {
+        // 骑手正在审核/审核未通过/封禁
         wx.redirectTo({
           url: '/pages/examPage/examPage?status=' + JSON.stringify(res.data.code)
         })

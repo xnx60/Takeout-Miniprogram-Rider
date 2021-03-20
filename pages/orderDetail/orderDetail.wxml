@@ -71,12 +71,13 @@
   <view class="text-bold text-xl text-black solids-bottom padding-bottom margin-bottom">配送信息</view>
   <view class="flex align-center margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:250rpx">收货人姓名</view>
-    <view class="flex-sub text-right text-df text-grey">{{item.userName}}</view>
+    <view class="flex-sub text-right text-df text-grey" wx:if="item.status == 3">{{item.userName}}</view>
+    <view class="flex-sub text-right text-df text-grey" wx:else>***</view>
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:250rpx">收货人电话号码</view>
-    <view class="flex-sub text-df text-grey text-right text-cyon" bindtap="phoneCall" data-phoneNum="{{item.userPhone}}">{{item.userPhone}}
-    </view>
+    <view class="flex-sub text-df text-grey text-right text-cyon" bindtap="phoneCall" data-phoneNum="{{item.userPhone}}" wx:if="item.status == 3">{{item.userPhone}}</view>
+    <view class="flex-sub text-df text-grey text-right text-cyon" wx:else>***</view>
   </view>
   <view class="flex margin-bottom solids-bottom padding-bottom">
     <view class="margin-right text-lg" style="width:140rpx">配送地址</view>
@@ -84,7 +85,7 @@
   </view>
   <view class="flex align-center">
     <view class="margin-right text-lg" style="width:140rpx">配送费</view>
-    <view class="flex-sub text-right text-df text-grey">{{item.deliveryFee}}</view>
+    <view class="flex-sub text-right text-df text-grey">¥ {{item.deliveryFee}}</view>
   </view>
 </view>
 

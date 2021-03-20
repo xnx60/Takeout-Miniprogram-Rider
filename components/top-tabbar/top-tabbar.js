@@ -8,7 +8,7 @@ Component({
    * 组件的属性列表
    */
   properties: {
-
+    tabbarList:{type:Array}
   },
 
   /**
@@ -17,9 +17,9 @@ Component({
   data: {
     TabCur: 0,
     scrollLeft:0,
-    tabbarList:[
-      '待接单','待取货','待送达'
-    ]
+    // tabbarList:[
+    //   '待接单','待取货','待送达'
+    // ]
   },
 
   /**

@@ -1,0 +1,5 @@
+<cu-custom bgColor="bg-cyan" isBack="true">
+  <text slot="backText">返回</text>
+  <text slot="content">快递代拿</text>
+</cu-custom>
+<top-tabbar bindemitIndex="handleEmitIndex" tabbarList="{{tabbarList}}"></top-tabbar>

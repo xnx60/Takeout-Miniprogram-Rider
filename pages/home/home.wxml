@@ -18,12 +18,18 @@
         <text class="cuIcon-message text-grey"></text>
         <text class="text-grey">接单历史</text>
       </view>
-    </view>  
+    </view> 
+    <view class="cu-item bg-grey {{menuArrow?'arrow':''}}" bindtap="toParcelModule">
+      <view class="content">
+        <text class="cuIcon-deliver text-grey"></text>
+        <text class="text-grey">快递代拿</text>
+      </view>
+    </view> 
   </view>
 </view>
 
 <!-- 顶部导航栏 -->
-<top-tabbar bindemitIndex="handleEmitIndex"></top-tabbar>
+<top-tabbar bindemitIndex="handleEmitIndex" tabbarList="{{tabbarList}}"></top-tabbar>
 
 <!-- 订单模块 -->
 <view class="order-module margin-bottom-xl" >
@@ -148,7 +154,7 @@
                       <text class="text-sm margin-right-xm">{{item.userName}}</text>        
                     </view>
                     <view class="text-center">
-                      <text class="text-sm margin-right-sm">（先生）</text>           
+                      <text class="text-sm margin-right-sm"></text>           
                     </view>
                     <view class="text-center">
                       <text class="text-sm margin-right-xm">{{item.userPhone}}</text>           
@@ -181,7 +187,7 @@
 </view>
 <!-- <bottom-telephoneBar phoneNumber="{{telephoneNumber}}"></bottom-telephoneBar> -->
 
-<view class="cu-load {{!isLoad?'loading':'over'}}" wx:if="{{isHideLoadMore}}"></view>
+<!-- <view class="cu-load {{!isLoad?'loading':'over'}}" wx:if="{{isHideLoadMore}}"></view> -->
 <view class="text-center text-grey" style="margin-bottom:150rpx" wx:if="isHiddenMore">———————— 没有更多了 ————————</view>
 
 

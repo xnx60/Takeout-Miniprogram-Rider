@@ -1,7 +1,9 @@
 import {
   totast,
+  loading, 
+  hideLoading,
   STATUS_CODE_infoSum_SUCCESSE,
-  STATUS_CODE_selectAllCampusName_SUCCESSE
+  STATUS_CODE_selectAllCampusName_SUCCESSE, 
 } from '../../service/config'
 import {
   selectAllCampus,
@@ -46,14 +48,11 @@ Page({
         if (res.confirm) {
           const id = wx.getStorageSync('id')
           this._infoSum(this.data.disCampus,this.data.disName,this.data.disGender,id)
-        } else{
-          wx.navigateBack({
-            delta: 1
-          })
-        }
+        } 
       }
     })
   },
+  // 获取全部校区
   _selectAllCampus() {
     selectAllCampus().then(res => {
       // console.log(res);
@@ -75,9 +74,10 @@ Page({
     })
   },
 
+  // 查出骑手信息
   _getDriverInfo(driverId) {
     getDriverInfo(driverId).then(res => {     
-      const disCampus = res.data.data.disCampus
+      const disCampus = res.data.data.campusName
       const disName = res.data.data.driverName
       const disGender=res.data.data.driverGender
       this.setData({
@@ -88,12 +88,17 @@ Page({
     })
   },
 
-  _infoSum(disCampus,disName,driverGender,driverId){     
+  // 信息修改提交
+  _infoSum(disCampus,disName,driverGender,driverId){  
+    loading('正在保存')   
     infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+      hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
         wx.navigateBack({
           delta: 1
         })
+        wx.setStorageSync('campus', this.data.disCampus)
+        app.globalData.disCampus=this.data.disCampus
       } else{
         totast(res.data.msg)
       }

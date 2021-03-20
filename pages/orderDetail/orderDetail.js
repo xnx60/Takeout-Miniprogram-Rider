@@ -18,18 +18,18 @@ Page({
     
   },
 
- /*
- **
- 电话呼叫
- */
-phoneCall(e) {
-    // console.log(e);
-    const phoneNum=e.currentTarget.dataset.phonenum
-    this.setData({
-      showBottomDialog: true,
-      telephoneNumber:phoneNum
-    })
-  },
+  /*
+  **
+  电话呼叫
+  */
+  phoneCall(e) {
+      // console.log(e);
+      const phoneNum=e.currentTarget.dataset.phonenum
+      this.setData({
+        showBottomDialog: true,
+        telephoneNumber:phoneNum
+      })
+    },
   confirmCall(){
     const phoneNumber=this.data.telephoneNumber
     this.setData({
@@ -73,10 +73,15 @@ phoneCall(e) {
   onLoad: function (options) {
     // console.log(options);
     const item=JSON.parse(options.item)
+    if(!item.completeTime){
+      item.completeTime='---'
+    }
+    if(!item.remarks){
+      item.remarks='无'
+    }
     this.setData({
-      item:item
-    })
-    
+      item
+    })  
   },
 
   /**
