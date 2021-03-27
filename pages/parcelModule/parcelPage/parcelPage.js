@@ -5,8 +5,26 @@ Page({
    * 页面的初始数据
    */
   data: {
-    tabbarList:['接单','送达'],
-    pageIndex:null
+    tabbarList:['待接单','待送达'],
+    tabberIndex:0,
+    parcelOrder:{
+      orderLists:{
+        pageNum:1,
+        lists:[
+          {
+
+          }
+        ]
+      },
+      deliveryLists:{
+        pageNum:1,
+        lists:[
+          {
+
+          }
+        ]
+      }
+    }
   },
 
   /**
@@ -15,11 +33,12 @@ Page({
   onLoad: function (options) {
 
   },
-
-  handleEmitIndex(e){
-    // 获取编号
+    // 获取tabber编号
+  handleTabberIndex(e){
+    console.log(e.detail);
+    
     this.setData({
-      pageIndex:e.detail
+      tabberIndex:e.detail
     })
     
   },

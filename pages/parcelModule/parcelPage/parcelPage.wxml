@@ -2,4 +2,102 @@
   <text slot="backText">返回</text>
   <text slot="content">快递代拿</text>
 </cu-custom>
-<top-tabbar bindemitIndex="handleEmitIndex" tabbarList="{{tabbarList}}"></top-tabbar>
+<top-tabbar bindemitIndex="handleTabberIndex" tabbarList="{{tabbarList}}"></top-tabbar>
+<view class="parcel-module margin-bottom-xl" >
+    <view class="list-wait" wx:if="{{tabberIndex === 0}}">
+      <block>
+        <view class="order-item">
+          <view class="cu-card article {{isCard?'no-card':''}}">
+            <view class="cu-item shadow">
+              <view class="title">
+                <view class="cuIcon-time text-cyan text-xl">
+                  <text class="text-black padding-left">期待送达：</text>
+                  <text class="text-yellow">2021.3.27下午五点</text>
+                </view>
+                <view class="cuIcon-send text-cyan" style="margin-top:-30rpx">
+                  <text class="text-black padding-left">快递大小：</text>
+                  <text class="text-yellow">2KG</text>
+                </view>
+                <!-- <view class="title-lable text-xl text-red fr"></view> -->
+              </view>
+              <!-- 时间轴 -->
+              <view class="cu-timeline">
+                <view class="cu-item cur">
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-xl margin-right-xm text-bold">广工西区左侧六号丰巢</text>   
+                    </view>
+                  </view> 
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm"></text>           
+                    </view>
+                  </view>                  
+                </view>
+
+                <view class="cu-item text-red ">
+                  <view class="content shadow-blur text-xl">
+                    广工西区六栋六楼
+                  </view>
+                </view>
+              </view>
+              <view class="flex">
+                <button class="bg-yellow lg" >抢单</button>
+              </view>  	
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+    <view class="delivery-wait" wx:else>
+      <block>
+        <view class="order-item">
+          <view class="cu-card article {{isCard?'no-card':''}}">
+            <view class="cu-item shadow">
+              <view class="title">
+                <view class="cuIcon-time text-cyan text-xl">
+                  <text class="text-black padding-left">期待送达：</text>
+                  <text class="text-yellow">2021.3.27下午五点</text>
+                </view>
+                <view class="cuIcon-send text-cyan" style="margin-top:-30rpx">
+                  <text class="text-black padding-left">快递大小：</text>
+                  <text class="text-yellow">2KG</text>
+                </view>
+                <!-- <view class="title-lable text-xl text-red fr"></view> -->
+              </view>
+              <!-- 时间轴 -->
+              <view class="cu-timeline">
+                <view class="cu-item cur">
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-xl margin-right-xm text-bold">广工西区左侧六号丰巢</text>   
+                    </view>
+                  </view> 
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm">取件码：22222222</text>           
+                    </view>
+                  </view>                  
+                </view>
+
+                <view class="cu-item text-red ">
+                  <view class="content shadow-blur text-xl">
+                    广工西区六栋六楼
+                  </view>
+                  <view class="content  shadow-blur">
+                    <view class="text-center margin-right-sm">
+                      <text class="text-sm">联系电话：8888888888（突突突）</text>           
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view class="padding flex justify-between align-center bg-white">
+                <button class="cu-btn text-xl" style="width: 120px; height:30px" bindtap="callCusMer" data-phoneNum="{{item.userPhone}}">联系顾客</button>
+                <button class="cu-btn bg-yellow text-xl" style="width: 120px; height:30px" bindtap="deliveryGoods" data-item="{{item}}" data-index="{{index}}">我已送达</button>
+              </view>	
+            </view>
+          </view>
+        </view>
+      </block>
+    </view>
+</view>

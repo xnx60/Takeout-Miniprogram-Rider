@@ -387,6 +387,9 @@ Page({
     }
   },
   toParcelModule() {
+    this.setData({
+      isShow: false
+    })
     wx.navigateTo({
       url: '/pages/parcelModule/parcelPage/parcelPage'
     })

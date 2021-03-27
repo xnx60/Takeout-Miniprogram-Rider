@@ -129,6 +129,17 @@
         {
           "name": "pages/personPage/personPage",
           "pathName": "pages/personPage/personPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/parcelModule/parcelPage/parcelPage",
+          "pathName": "pages/parcelModule/parcelPage/parcelPage",
+          "scene": null
+        },
+        {
+          "name": "pages/parcelModule/parcelPage/parcelPage",
+          "pathName": "pages/parcelModule/parcelPage/parcelPage",
           "scene": null
         }
       ]
