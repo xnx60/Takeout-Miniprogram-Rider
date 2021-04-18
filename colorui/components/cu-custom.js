@@ -35,6 +35,10 @@ Component({
       type: [Boolean, String],
       default: false
     },
+    isPerson: {
+      type: [Boolean, String],
+      default: false
+    },
     isLocated: {
       type: [Boolean, String],
       default: false

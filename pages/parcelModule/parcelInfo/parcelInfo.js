@@ -2,11 +2,11 @@ import {
   totast,
   STATUS_CODE_infoSum_SUCCESSE,
   STATUS_CODE_selectAllCampusName_SUCCESSE, loading, hideLoading
-}from '../../service/config'
+}from '../../../service/config'
 import {
   selectAllCampus,
   infoSum
-}from '../../service/infoSum'
+}from '../../../service/infoSum'
 const app = getApp();
 Page({
 
@@ -14,7 +14,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    disCampus:app.globalData.disCampus,
+    parcelCampus:app.globalData.disCampus,
     disName:'',
     campusInfo:[], 
     campusNameList:[],
@@ -24,7 +24,6 @@ Page({
     flag:null
   },
   onLoad(){
-    
     this._selectAllCampus()
   },
 
@@ -64,14 +63,14 @@ Page({
 },
 
   infoSum(){
-   const driverId= wx.getStorageSync('id')
+   const parcelId= wx.getStorageSync('parcelId')
    const flag=this.data.flag
     if(flag){
       wx.showModal({
         content: '是否确认提交信息',
         success: (res) => {
           if (res.confirm) {
-            this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+            this._infoSum(this.data.parcelCampus, this.data.disName,this.data.genderIndex,parcelId)
           }
         }
       })
@@ -84,14 +83,14 @@ Page({
 
   _infoSum(disCampus,disName,driverGender,driverId){ 
     loading('提交中') 
-    const driverIdentity = 1   
+    const driverIdentity = 2   
     infoSum(disCampus,disName,driverGender,driverId,driverIdentity).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
-        wx.setStorageSync('campus', this.data.disCampus)
-        app.globalData.disCampus=this.data.disCampus
+        wx.setStorageSync('parcelCampus', this.data.parcelCampus)
+        app.globalData.parcelCampus=this.data.parcelCampus
         wx.redirectTo({
-          url: '/pages/riderApply/riderApply',
+          url: '/pages/parcelModule/parcelApply/parcelApply',
         })
       } else if(res.data.code==1500){
         totast('请把信息补充完整')

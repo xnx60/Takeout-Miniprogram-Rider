@@ -1,0 +1,14 @@
+<cu-custom bgColor="bg-cyan">
+  <text slot="content">身份选择</text>
+</cu-custom>
+<view class="entry flex justify-center text-xsl" style="margin-top:450rpx" >
+  <view class="takeAway bg-cyan text-center margin-right" style="width:200rpx;height:200rpx;border-radius:50% 50%" bindtap="toTakeAway">
+    <view class="cuIcon-deliver"></view>
+    <view class="text-sm">外卖骑手</view>
+  </view>
+  <view class="parcel bg-cyan text-center  margin-left" style="width:200rpx;height:200rpx;border-radius:50% 50%" bindtap="toParcel">
+    <view class="cuIcon-friendadd"></view>
+    <view class="text-sm">快递代拿</view>
+  </view>
+</view>
+

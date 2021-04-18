@@ -13,6 +13,10 @@
       <text class="cuIcon-sort"></text>
       <slot name="backText"></slot>
     </view>
+    <view class=" text-xxl margin-left-xs" wx:if="{{isPerson}}">
+      <text class="cuIcon-profile"></text>
+      <slot name="backText"></slot>
+    </view>
 
     <view class="text-cut text-lg margin-right-xs" style="max-width: 150rpx" bindtap="choosePosition"  wx:if="{{isLocated}}">
       <text class="cuIcon-locationfill"></text>

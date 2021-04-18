@@ -13,7 +13,7 @@ export function selectAllCampus(){
   })
 }
 
-export function infoSum(disCampus, driverName,driverGender,driverId){
+export function infoSum(disCampus, driverName,driverGender,driverId,driverIdentity){
   return request({
     url:  API_URL_infoSum,
     method:'POST',
@@ -21,7 +21,8 @@ export function infoSum(disCampus, driverName,driverGender,driverId){
       disCampus,
       driverName,
       driverGender,
-      driverId
+      driverId,
+      driverIdentity
     },
   })
 }

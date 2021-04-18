@@ -34,7 +34,7 @@
 <!-- 订单模块 -->
 <view class="order-module margin-bottom-xl" >
     <view class="list-wait" wx:if="{{index === 0}}">
-      <block wx:for="{{orders.orderLists.lists}}" wx:key="{{index}}">
+      <block wx:for="{{orders.orderLists.lists}}" wx:key="index">
         <view class="order-item">
           <view class="cu-card article {{isCard?'no-card':''}}">
             <view class="cu-item shadow">
@@ -187,8 +187,7 @@
 </view>
 <!-- <bottom-telephoneBar phoneNumber="{{telephoneNumber}}"></bottom-telephoneBar> -->
 
-<!-- <view class="cu-load {{!isLoad?'loading':'over'}}" wx:if="{{isHideLoadMore}}"></view> -->
-<view class="text-center text-grey" style="margin-bottom:150rpx" wx:if="isHiddenMore">———————— 没有更多了 ————————</view>
+
 
 
   

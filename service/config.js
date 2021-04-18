@@ -61,8 +61,9 @@ export const API_URL_updateOrderStatus = '/order/updateOrderStatus'
 // 东龙接口
 export const API_URL_login = '/driverinfo/login'
 export const API_URL_checkLoginStatus = '/driverinfo'
-
 export const API_URL_infoSum = '/driverinfo/update'
+
+
 export const API_URL_selectAllCampusName = '/campus/selectAllCampusName'
 export const API_URL_updatePhoto = '/driverprove/updatePhoto'
 export const API_URL_submitProve = '/driverprove/uploadPicture'
@@ -72,6 +73,25 @@ export const API_URL_getOrderHistory = '/order/selectRiderOrderHistory'
 export const API_URL_getDriverInfo = '/driverinfo/selectById'
 
 export const API_URL_oncePaySharing = '/wechatpay/oncePaySharing'
+
+/**
+ * 快递代拿
+ */
+// 查询待接单列表
+export const API_URL_selectWaitToTakeOrder = '/expressAgent/selectWaitToTakeOrder'
+export const STATUS_CODE_selectWaitToTakeOrder_SUCCESSE = 3200
+// 分页查询已接单
+export const API_URL_selectRiderOrder = '/expressAgent/selectRiderOrder'
+export const STATUS_CODE_selectRiderOrder_SUCCESSE = 3200
+// 骑手抢单
+export const API_URL_getOrder = '/expressAgent/riderReceive'
+export const STATUS_CODE_getOrder_SUCCESSE = 3200
+// 骑手送达（更新为订单完成）
+export const API_URL_completeOrder = '/expressAgent/completeOrder'
+export const STATUS_CODE_completeOrder_SUCCESSE = 3200
+
+
+
 
 
 

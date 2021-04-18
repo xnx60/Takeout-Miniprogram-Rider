@@ -402,7 +402,7 @@ Page({
     })
   },
 
-  /** 联系商家 和骑手*/
+  /** 联系商家 和顾客*/
   callCusMer(e) {
     console.log(e);
     const phoneNum = e.currentTarget.dataset.phonenum
@@ -446,8 +446,7 @@ Page({
       this.setData({
         driverLoginStatus:res.data.code
       })
-      console.log(wx.getStorageSync('driverStatus'),'登录状态');
-       
+      // console.log(wx.getStorageSync('driverStatus'),'登录状态');     
       if (res.data.code == 2508) {
         // 骑手还没上传证明材料
         wx.redirectTo({

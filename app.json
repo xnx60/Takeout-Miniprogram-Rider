@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/entry/entry",
     "pages/home/home",
     "pages/orderHistory/orderHistory",
     "pages/personPage/personPage",
@@ -8,7 +9,13 @@
     "pages/login/login",
     "pages/infoCom/infoCom",
     "pages/examPage/examPage",
-    "pages/parcelModule/parcelPage/parcelPage"
+    "pages/parcelModule/parcelPage/parcelPage",
+    "pages/parcelModule/parcelPerson/parcelPerson",
+    "pages/parcelModule/parcelLogin/parcekLogin",
+    "pages/parcelModule/parcelLogin/parcelLogin",
+    "pages/parcelModule/parcelExam/parcelExam",
+    "pages/parcelModule/parcelInfo/parcelInfo",
+    "pages/parcelModule/parcelApply/parcelApply"
   ],
   "window": {
     "navigationStyle": "custom"

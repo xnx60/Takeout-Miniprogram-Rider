@@ -127,7 +127,7 @@ App({
   },
    _getDriverInfo() {
     getDriverInfo(wx.getStorageSync('id')).then(res => {     
-       console.log('hadCampus',res);
+      //  console.log('hadCampus',res);
       wx.setStorageSync('campus', res.data.data.campusName  )
     })
   },
