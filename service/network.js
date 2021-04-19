@@ -7,8 +7,9 @@ import {
 
 export default function (options, headerContentType) {
   const token = wx.getStorageSync('token')
+  const parcelToken = wx.getStorageSync('parcelToken')
   // const driverLoginStatus = wx.getStorageSync('driverStatus')
-  if (token) {
+  if (token || parcelToken) {
     return new Promise((reslove, reject) => {
       wx.request({
         url: BASE_URL + options.url,

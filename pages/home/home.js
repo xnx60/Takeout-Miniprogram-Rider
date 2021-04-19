@@ -350,7 +350,7 @@ Page({
     this.setData({
       isShow: false
     })
-    const token = wx.getStorageSync(TOKEN)
+    const token = wx.getStorageSync('token')
     const id = wx.getStorageSync('id')
     if (!token && !id) {
       wx.navigateTo({

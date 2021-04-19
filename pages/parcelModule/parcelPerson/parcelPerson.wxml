@@ -16,7 +16,7 @@
 	<view class="title">校区选择</view>
 	<picker bindchange="PickerCampus" value="{{campusIndex}}" range="{{campusNameList}}">
 		<view class="picker">
-			{{campusIndex?campusNameList[campusIndex]:disCampus}}
+			{{campusIndex?campusNameList[campusIndex]:parcelCampus}}
 		</view>
 	</picker>
 </view>

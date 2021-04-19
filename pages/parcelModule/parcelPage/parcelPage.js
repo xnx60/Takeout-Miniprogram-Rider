@@ -19,7 +19,7 @@ import {
 } from '../../../service/login'
 import {
   getDriverInfo,
-} from '../../service/infoSum'
+} from '../../../service/infoSum'
 const app = getApp();
 Page({
 
@@ -28,7 +28,7 @@ Page({
    */
   data: {
     parcelCampus:'',
-    driverId:'',
+    parcelId:'',
     tabbarList:['待接单','已接单'],
     tabberIndex:0,
     parcelOrder:{
@@ -60,27 +60,28 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
   },
-
     /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    // 获取骑手信息
+    this._getDriverInfo()
     // 判断登录注册状态
     const parcelToken = wx.getStorageSync('parcelToken')
     const parcelId = wx.getStorageSync('parcelId')
     if(parcelId && parcelToken){
       this._checkLoginStatus(parcelId)
     }
-
     const parcelCampus = wx.getStorageSync('parcelCampus')
     this.setData({
       parcelCampus,
       parcelId
     })
+    // if(parcelCampus){
     this._selectWaitToTakeOrder()
     this._getRiderOrders()
+    // }  
   },
     // 获取tabber编号
   handleTabberIndex(e){
@@ -119,17 +120,18 @@ Page({
   },
 
   toPerson(){
+    console.log('进入个人页面'); 
     const parcelToken = wx.getStorageSync('parcelToken')
     const parcelId = wx.getStorageSync('parcelId')
     if (!parcelToken && !parcelId) {
       wx.navigateTo({
         url: '/pages/parcelModule/parcelLogin/parcelLogin'
       })
-    } else if(this.data.driverLoginStatus==2508){
+    } else if(this.data. parcelLoginStatus==2508){
       wx.navigateTo({
         url: '/pages/parcelModule/parcelApply/parcelApply'
       })
-    }else if(this.data.driverLoginStatus==2551){
+    }else if(this.data. parcelLoginStatus==2551){
       wx.navigateTo({
         url: '/pages/parcelModule/parcelPerson/parcelPerson'
       })
@@ -176,28 +178,33 @@ Page({
  async _selectWaitToTakeOrder(){
   loading('加载中')
   const tabberIndex = this.data.tabberIndex
-  const campus = this.data.parcelCampus
-  const pageNumber = this.data.parcelOrder.orderLists.pageNum
+  const campus = this.data.parcelCampus || null
+  const pageNum = this.data.parcelOrder.orderLists.pageNum
   const pageSize = 3
-  let listGain = []
-  const showLists = this.data.parcelOrder.orderLists.lists
-  selectWaitToTakeOrder(campus,pageNumber,pageSize).then(res=>{
-    hideLoading()
-    if(res.data.code === STATUS_CODE_selectWaitToTakeOrder_SUCCESSE){
-      // console.log(res.data);
-      this.data.parcelOrder.orderLists.hasNextPage = res.data.data.hasNextPage                  
-      listGain.push(...res.data.data.list) 
-      showLists.push(...listGain)
-      const newList=`parcelOrder.orderLists.lists`  
-      const isHideLoadMore = `parcelOrder.orderLists.isHideLoadMore` 
-      this.setData({
-        [newList]: showLists,
-        [isHideLoadMore]: false
-      }) 
-    }
-  }).catch(res => {
-    totast('系统错误，请稍后重试')
-  })
+  let showLists = []
+  // const showLists = this.data.parcelOrder.orderLists.lists
+  for( let i = 1;i < pageNum + 1; i++){
+    const pageNumber = i
+    selectWaitToTakeOrder(campus,pageNumber,pageSize).then(res=>{
+      hideLoading()
+      if(res.data.code === STATUS_CODE_selectWaitToTakeOrder_SUCCESSE){
+        console.log(res.data);
+        console.log('获取待接单接口11111111');
+        this.data.parcelOrder.orderLists.hasNextPage = res.data.data.hasNextPage                  
+        // listGain.push(...res.data.data.list) 
+        showLists.push(...res.data.data.list)
+        const newList=`parcelOrder.orderLists.lists`  
+        const isHideLoadMore = `parcelOrder.orderLists.isHideLoadMore` 
+        this.setData({
+          [newList]: showLists,
+          [isHideLoadMore]: false
+        }) 
+      }
+    }).catch(res => {
+      totast('系统错误，请稍后重试')
+    })
+  }
+ 
 },
 // 抢单接口
 _getOrder(itemId){
@@ -206,6 +213,7 @@ _getOrder(itemId){
   getOrder(id,riderId).then(res=>{
     if(res.data.code === STATUS_CODE_getOrder_SUCCESSE){
       this._getRiderOrders()
+      this._selectWaitToTakeOrder()
     }
   })
 },
@@ -223,21 +231,20 @@ async _getRiderOrders(){
       if(res.data.code===STATUS_CODE_selectRiderOrder_SUCCESSE){ 
         this.data.parcelOrder.deliveryLists.hasNextPage = res.data.data.hasNextPage    
         // listGain.push(...res.data.data.list)
-        showLists.push(...res.data.data.list)
-        console.log(showLists);        
+        showLists.push(...res.data.data.list)    
       }      
      }).catch(res => {
       totast('系统错误，请稍后重试')
     })
   }
   hideLoading()
-  const newList=`parcelOrder.deliveryLists.lists`
-  // const isHideLoadMore = `parcelOrder.orderLists.isHideLoadMore` 
-  this.setData({
-    [newList]: showLists,
-    // [isHideLoadMore]: false
-  })  
-  this.data.parcelOrder.deliveryLists.isHideLoadMore = false
+    const newList=`parcelOrder.deliveryLists.lists`
+    // const isHideLoadMore = `parcelOrder.orderLists.isHideLoadMore` 
+    this.setData({
+      [newList]: showLists,
+      // [isHideLoadMore]: false
+    })  
+    this.data.parcelOrder.deliveryLists.isHideLoadMore = false
 },
 // 更新为订单完成
 async _completeOrder(itemInfo){
@@ -251,10 +258,17 @@ async _completeOrder(itemInfo){
     }
   })
 },
+// 获取骑手信息
+async _getDriverInfo() {
+  getDriverInfo(wx.getStorageSync('parcelId')).then(res => {     
+    //  console.log('hadCampus',res);
+    wx.setStorageSync('parcelCampus', res.data.data.campusName  )
+  })
+},
   /* 
   检测登录状态
   */
- _checkLoginStatus(parcelId) {
+ async _checkLoginStatus(parcelId) {
   checkLoginStatus(parcelId).then(res => {
     wx.setStorageSync('parcelStatus', res.data.code)
     this.setData({

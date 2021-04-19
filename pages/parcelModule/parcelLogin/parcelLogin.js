@@ -40,6 +40,7 @@ Page({
     })
   },
   getPhoneNum(e) {
+    // console.log(e);
     if (e.detail.errMsg == 'getPhoneNumber:ok') {
       loading('加载中')
       wx.request({
@@ -55,7 +56,7 @@ Page({
         },
         success: res => {
           hideLoading()
-          if (res.data.code == STATUS_CODE_login_SUCCESSE) {
+          if (res.data.code === STATUS_CODE_login_SUCCESSE) {
             console.log('登录成功');
             wx.setStorageSync('parcelId', res.data.data.driverId)
             wx.setStorageSync('parcelToken', res.data.data.driverToken)
@@ -78,7 +79,8 @@ Page({
   },
 
   _checkLoginStatus(parcelId) {
-    checkLoginStatus(parcelId).then(res => {
+    const driverId = parcelId
+    checkLoginStatus(driverId).then(res => {
       console.log(res,'checkLogin');
       if (res.data.code == 2508) {
         // 骑手还没上传证明材料
@@ -92,7 +94,6 @@ Page({
         })
       } else if (res.data.code == 2551) {
         // 审核通过
-        app.onShow()
         wx.redirectTo({
           url: '/pages/parcelModule/parcelPage/parcelPage',
         })

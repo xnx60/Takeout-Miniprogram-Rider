@@ -129,7 +129,7 @@ Page({
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
         totast('提交成功')
         wx.redirectTo({
-          url: '/pages/home/home',
+          url: '/pages/parcelModule/parcelPage/parcelPage',
         })        
       } else if (res.data.code==1500){
         totast(res.data.msg)

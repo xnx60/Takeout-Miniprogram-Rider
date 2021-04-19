@@ -11,7 +11,6 @@
     "pages/examPage/examPage",
     "pages/parcelModule/parcelPage/parcelPage",
     "pages/parcelModule/parcelPerson/parcelPerson",
-    "pages/parcelModule/parcelLogin/parcekLogin",
     "pages/parcelModule/parcelLogin/parcelLogin",
     "pages/parcelModule/parcelExam/parcelExam",
     "pages/parcelModule/parcelInfo/parcelInfo",

@@ -21,7 +21,7 @@
                   </view>
                   <view class="cuIcon-send text-cyan" style="margin-top:-30rpx">
                     <text class="text-black padding-left">快递类型：</text>
-                    <text class="text-cyan">({{item.specifications}}){{item.expressContent}}</text>
+                    <text class="text-cyan">({{item.specifications}}){{item.expressContent?item.expressContent:'***'}}</text>
                   </view>
                 </view>
                 <div class="title-lable">                
@@ -30,7 +30,7 @@
                 <!-- <view class="title-lable text-xl text-red fr"></view> -->
               </view>
               <!-- 步骤条 -->
-              <view class="bg-white padding">
+              <!-- <view class="bg-white padding">
                 <view class="cu-steps">
                   <view class="cu-item {{index>basics?'':'text-red'}}">
                     <text class="cuIcon-usefullfill"></text>{{item.pickUpAddress}}
@@ -39,7 +39,7 @@
                     <text class="cuIcon-radioboxfill"></text>{{item.serviceAddress}}
                   </view>
                 </view>
-              </view>
+              </view> -->
               <view class="flex">
                 <button class="bg-cyan lg"  bindtap="takeOrders" data-id="{{item.id}}">抢单</button>
               </view>  	

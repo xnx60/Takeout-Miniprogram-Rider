@@ -28,11 +28,11 @@ Page({
   },
 
   PickerCampus(e) {
-    const disCampus=this.data.campusNameList[e.detail.value] 
+    const parcelCampus=this.data.campusNameList[e.detail.value] 
     const campusIndex=e.detail.value
     this.setData({
       campusIndex,
-      disCampus
+      parcelCampus
     })
   },
 

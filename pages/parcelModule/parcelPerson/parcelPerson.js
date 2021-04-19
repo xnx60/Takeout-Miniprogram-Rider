@@ -27,7 +27,6 @@ Page({
 
   onLoad() {
     const parcelId = wx.getStorageSync('parcelId')
-
     this._getDriverInfo(parcelId)
     this._selectAllCampus()
   },
@@ -55,7 +54,7 @@ Page({
   // 获取全部校区
   _selectAllCampus() {
     selectAllCampus().then(res => {
-      // console.log(res);
+      console.log(res);
       if (res.data.code == STATUS_CODE_selectAllCampusName_SUCCESSE) {
         const campusInfo = res.data.data
         const campusNameList = this.data.campusNameList
@@ -68,6 +67,8 @@ Page({
           campusInfo,
           campusNameList
         })
+        console.log(campusNameList);
+        
       } else {
         totast('校区查询失败')
       }
@@ -76,7 +77,10 @@ Page({
 
   // 查出骑手信息
   _getDriverInfo(parcelId) {
-    getDriverInfo(driverId).then(res => {     
+    const driverId = parcelId
+    getDriverInfo(driverId).then(res => { 
+      console.log(res);
+          
       const parcelCampus = res.data.data.campusName
       const disName = res.data.data.driverName
       const disGender=res.data.data.driverGender
@@ -89,8 +93,9 @@ Page({
   },
 
   // 信息修改提交
-  _infoSum( parcelCampus,disName,driverGender, parcelId){  
+  _infoSum(parcelCampus,disName,driverGender, parcelId){  
     loading('正在保存')   
+    const disCampus = parcelCampus
     infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){

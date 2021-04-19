@@ -26,7 +26,7 @@ export function hideLoading(){
  * 配置网络请求相关的常量
  */
 // export const BASE_URL = 'https://longdongwu.free.idcfengye.com'
-export const BASE_URL = 'https://www.lizeqiang.top:8888'
+export const BASE_URL = 'https://192.168.1.107:8888'
 
 export const WS_BASE_URL = 'wss://www.lizeqiang.top:58080'
 export const WEB_SOCKET_URL = `${WS_BASE_URL}/ws`

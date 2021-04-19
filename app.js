@@ -64,8 +64,7 @@ App({
     })
   },
   async onShow() {
-    
-    await this._getDriverInfo()
+    // await this._getDriverInfo()
     this.wsConnect()
   },
   async wsConnect() {
@@ -125,12 +124,12 @@ App({
       
     })
   },
-   _getDriverInfo() {
-    getDriverInfo(wx.getStorageSync('id')).then(res => {     
-      //  console.log('hadCampus',res);
-      wx.setStorageSync('campus', res.data.data.campusName  )
-    })
-  },
+  //  _getDriverInfo() {
+  //   getDriverInfo(wx.getStorageSync('id')).then(res => {     
+  //     //  console.log('hadCampus',res);
+  //     wx.setStorageSync('disCampus', res.data.data.campusName  )
+  //   })
+  // },
   globalData: {
     driverId: null,
     userInfo: null,
