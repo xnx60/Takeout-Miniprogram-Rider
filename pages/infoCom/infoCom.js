@@ -20,14 +20,31 @@ Page({
     campusNameList:[],
     genderPicker:['男','女'],
     genderIndex:null,
+    // 是否选择身份
+    isIdentity:false,
+    driverIdentityName:'快递代拿',
+    driverIdentityPicker:['外卖骑手','快递代拿'],
+    driverIdentityIndex:null,
     campusIndex:null,
     flag:null
   },
   onLoad(){
-    
     this._selectAllCampus()
+    // entry中是否点击了身份选择按钮
+    const driverIdentity = wx.getStorageSync('driverIdentity')
+    if(driverIdentity){
+      const driverIdentityName = driverIdentity == 1?'外卖骑手':'快递代拿'
+      const driverIdentityIndex = driverIdentity == 1? 0:1
+      this.setData({
+        isIdentity:true,
+        driverIdentityName,
+        driverIdentityIndex
+      })
+    }
   },
-
+  toHome(){
+    console.log('tohome');  
+  },
   PickerCampus(e) {
     const disCampus=this.data.campusNameList[e.detail.value] 
     const campusIndex=e.detail.value
@@ -41,6 +58,12 @@ Page({
     // console.log(e);
     this.setData({
       genderIndex: e.detail.value
+    })
+  },
+  PickerDriverIdentity(e) {
+    // console.log(e);
+    this.setData({
+      driverIdentityIndex: e.detail.value
     })
   },
 
@@ -64,14 +87,14 @@ Page({
 },
 
   infoSum(){
-   const driverId= wx.getStorageSync('id')
+   const driverId= wx.getStorageSync('driverId')
    const flag=this.data.flag
     if(flag){
       wx.showModal({
         content: '是否确认提交信息',
         success: (res) => {
           if (res.confirm) {
-            this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId)
+            this._infoSum(this.data.disCampus, this.data.disName,this.data.genderIndex,driverId,this.data.driverIdentityIndex)
           }
         }
       })
@@ -82,13 +105,14 @@ Page({
 
   },
 
-  _infoSum(disCampus,disName,driverGender,driverId){ 
-    loading('提交中') 
-    const driverIdentity = 1   
+  _infoSum(disCampus,disName,driverGender,driverId,driverIdentityIndex){ 
+    loading('提交中')  
+    const driverIdentity = driverIdentityIndex == 0? 1:2
     infoSum(disCampus,disName,driverGender,driverId,driverIdentity).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
-        wx.setStorageSync('campus', this.data.disCampus)
+        wx.setStorageSync('driverCampus', this.data.disCampus)
+        wx.setStorageSync('driverIdentity', driverIdentity)
         app.globalData.disCampus=this.data.disCampus
         wx.redirectTo({
           url: '/pages/riderApply/riderApply',

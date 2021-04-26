@@ -19,12 +19,12 @@
         <text class="text-grey">接单历史</text>
       </view>
     </view> 
-    <view class="cu-item bg-grey {{menuArrow?'arrow':''}}" bindtap="toParcelModule">
+    <!-- <view class="cu-item bg-grey {{menuArrow?'arrow':''}}" bindtap="toParcelModule">
       <view class="content">
         <text class="cuIcon-deliver text-grey"></text>
         <text class="text-grey">快递代拿</text>
       </view>
-    </view> 
+    </view>  -->
   </view>
 </view>
 

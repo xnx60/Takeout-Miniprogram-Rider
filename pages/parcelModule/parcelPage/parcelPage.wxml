@@ -100,7 +100,7 @@
                     <text class="cuIcon-phone text-grey text-bold" bindtap="callCus" data-phoneNum="{{item.addresseePhone}}">{{item.addresseePhone}}</text>
               </view>
               <view class="flex" wx:if="{{item.status == 1}}">
-                <button class="bg-cyan lg"  bindtap="deliveryGoods" data-id="{{item.id}}">送达</button>
+                <button class="bg-cyan lg"  bindtap="deliveryGoods" data-itemInfo="{{item}}">送达</button>
               </view>  	
               <view class="flex" wx:else>
                 <button class="lg text-grey">已完成</button>

@@ -8,7 +8,8 @@ export function totast(text,time){
     title: text,
     duration:time||1500,
     icon:'none',
-  })}
+  })
+}
 
 // 显示 loading 提示框。需主动调用 wx.hideLoading 才能关闭提示框
 export function loading(text){
@@ -26,7 +27,9 @@ export function hideLoading(){
  * 配置网络请求相关的常量
  */
 // export const BASE_URL = 'https://longdongwu.free.idcfengye.com'
-export const BASE_URL = 'https://192.168.1.107:8888'
+// export const BASE_URL = 'https://192.168.1.107:8888'
+export const BASE_URL = 'https://www.sijie666.com:8080'
+// export const BASE_URL = 'https://192.168.1.110:8080'
 
 export const WS_BASE_URL = 'wss://www.lizeqiang.top:58080'
 export const WEB_SOCKET_URL = `${WS_BASE_URL}/ws`
@@ -49,6 +52,7 @@ export const STATUS_CODE_submitProve_SUCCESSE = 1204 //提交审核材料
 
 export const STATUS_CODE_getSaleHistory_SUCCESS = 3207
 export const STATUS_CODE_getOrderHistory_SUCCESS = 3203
+export const STATUS_CODE_getDriverInfo_SUCCESS = 3200 // 获取骑手信息
 
 
 
@@ -89,6 +93,12 @@ export const STATUS_CODE_getOrder_SUCCESSE = 3200
 // 骑手送达（更新为订单完成）
 export const API_URL_completeOrder = '/expressAgent/completeOrder'
 export const STATUS_CODE_completeOrder_SUCCESSE = 3200
+// 快递支付
+export const API_URL_agentPre = '/wechatpay/agentPre'
+export const STATUS_CODE_agentPre_SUCCESSE = 3200
+// 分账
+export const API_URL_agentSharing = '/wechatpay/agentSharing'
+export const STATUS_CODE_agentSharing_SUCCESSE = 3200
 
 
 

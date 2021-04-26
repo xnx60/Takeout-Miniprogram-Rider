@@ -30,8 +30,8 @@ App({
     })
     // 登录操作
 
-    const token = wx.getStorageSync(TOKEN)
-    const id = wx.getStorageSync('id')
+    const token = wx.getStorageSync('driverToken')
+    const id = wx.getStorageSync('driverId')
     
     // 获取用户信息
     wx.getSetting({
@@ -64,11 +64,13 @@ App({
     })
   },
   async onShow() {
-    // await this._getDriverInfo()
+    if(wx.getStorageSync('driverId')){
+      await this._getDriverInfo()
+    }
     this.wsConnect()
   },
   async wsConnect() {
-    if (wx.getStorageSync('id')) {
+    if (wx.getStorageSync('driverId')) {
       await this.wsClose()
       loading('加载中')
       wx.connectSocket({
@@ -99,12 +101,12 @@ App({
     })
   },
   wsSend() {
-    console.log(wx.getStorageSync('campus'),'send');
+    console.log(wx.getStorageSync('driverCampus'),'send');
     wx.sendSocketMessage({
       data: JSON.stringify({
-        rid: wx.getStorageSync('id'),
+        rid: wx.getStorageSync('driverId'),
         identity: 'rider',
-        campus: wx.getStorageSync('campus')
+        campus: wx.getStorageSync('driverCampus')
       }),
       success: res => {
         console.log('send', res);
@@ -124,16 +126,16 @@ App({
       
     })
   },
-  //  _getDriverInfo() {
-  //   getDriverInfo(wx.getStorageSync('id')).then(res => {     
-  //     //  console.log('hadCampus',res);
-  //     wx.setStorageSync('disCampus', res.data.data.campusName  )
-  //   })
-  // },
+   _getDriverInfo() {
+    getDriverInfo(wx.getStorageSync('driverId')).then(res => {     
+      //  console.log('hadCampus',res);
+      wx.setStorageSync('driverCampus', res.data.data.campusName  )
+    })
+  },
   globalData: {
     driverId: null,
     userInfo: null,
-    disCampus: '',
+    driverCampus: '',
     disName: '',
   }
 })

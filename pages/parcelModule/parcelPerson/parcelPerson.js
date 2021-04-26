@@ -19,6 +19,8 @@ Page({
   data: {
     parcelCampus: '',
     disName: '',
+    driverIdentity:'快递代拿',
+    driverPhoneNum:1111111,
     disGender:2,
     campusInfo: [],
     campusNameList: [],
@@ -26,11 +28,17 @@ Page({
   },
 
   onLoad() {
-    const parcelId = wx.getStorageSync('parcelId')
+    const parcelId = wx.getStorageSync('driverId')
     this._getDriverInfo(parcelId)
     this._selectAllCampus()
   },
-
+  toParcelPage(){
+    console.log('返回主页面');
+    
+    wx.navigateTo({
+      url: '/pages/parcelModule/parcelPage/parcelPage',
+    })
+  },
   PickerCampus(e) {
     const parcelCampus = this.data.campusNameList[e.detail.value]
     const campusIndex = e.detail.value
@@ -45,7 +53,7 @@ Page({
       content: '是否保存信息',
       success: (res) => {
         if (res.confirm) {
-          const parcelId = wx.getStorageSync('parcelId')
+          const parcelId = wx.getStorageSync('driverId')
           this._infoSum(this.data.parcelCampus,this.data.disName,this.data.disGender,parcelId)
         } 
       }
@@ -79,15 +87,18 @@ Page({
   _getDriverInfo(parcelId) {
     const driverId = parcelId
     getDriverInfo(driverId).then(res => { 
-      console.log(res);
-          
+      console.log(res);   
       const parcelCampus = res.data.data.campusName
       const disName = res.data.data.driverName
-      const disGender=res.data.data.driverGender
+      const disGender = res.data.data.driverGender
+      const driverPhoneNum = res.data.data.driverPhone
+      const driverIdentity = res.data.data.driverIdentity
+      wx.setStorageSync('driverId', res.data.data.driverId)
       this.setData({
         parcelCampus,
         disName,
-        disGender
+        disGender,
+        driverPhoneNum
       })
     })
   },
@@ -96,13 +107,14 @@ Page({
   _infoSum(parcelCampus,disName,driverGender, parcelId){  
     loading('正在保存')   
     const disCampus = parcelCampus
-    infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+    const driverId = parcelId
+    infoSum(disCampus,disName,driverGender,driverId,2).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
-        wx.navigateBack({
-          delta: 1
+        wx.navigateTo({
+          url: '/pages/parcelModule/parcelPage/parcelPage',
         })
-        wx.setStorageSync(' parcelCampus', this.data. parcelCampus)
+        wx.setStorageSync('driverCampus', this.data.parcelCampus)
         // app.globalData.disCampus=this.data.disCampus
       } else{
         totast(res.data.msg)

@@ -1,6 +1,6 @@
-<cu-custom bgColor="bg-cyan" >
+<cu-custom bgColor="bg-cyan" isBack="true">
   <text slot="content">审核页面</text>
-  <!-- <text slot="backText" bindtap="">返回</text> -->
+  <text slot="backText" bindtap="">返回</text>
 </cu-custom>
 <view class="text-xxl padding-lr text-center" style="margin-top:500rpx">
   <view class="flex-sub" wx:if="{{status === 2550}}">
@@ -10,7 +10,7 @@
       <text>审核未通过，请重新提交证明材料</text>
       <button class="bg-green margin" style="margin-top:350rpx" bindtap="backApplyPage">重试</button>
     </view>
-    <view class="flex-sub" wx:else>
+    <view class="flex-sub" wx:if="{{status === 2553}}">
       <text>该骑手号已被封禁，请联系管理员</text>
       <button class="bg-green margin" style="margin-top:350rpx"> <text class="cuIcon-dianhua"></text> 联系管理员</button>
     </view>

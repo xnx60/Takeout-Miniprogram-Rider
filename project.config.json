@@ -135,11 +135,31 @@
         {
           "name": "pages/parcelModule/parcelPage/parcelPage",
           "pathName": "pages/parcelModule/parcelPage/parcelPage",
+          "query": "",
           "scene": null
         },
         {
           "name": "pages/parcelModule/parcelPage/parcelPage",
           "pathName": "pages/parcelModule/parcelPage/parcelPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/parcelModule/parcelInfo/parceInfo",
+          "pathName": "pages/parcelModule/parcelPage/parcelPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/parcelModule/parcelInfo/parcelInfo",
+          "pathName": "pages/parcelModule/parcelPage/parcelPage",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/parcelModule/parcelPerson/parcelPerson",
+          "pathName": "pages/infoCom/infoCom",
+          "query": "",
           "scene": null
         }
       ]

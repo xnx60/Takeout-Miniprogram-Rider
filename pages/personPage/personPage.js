@@ -19,6 +19,8 @@ Page({
   data: {
     disCampus: '',
     disName: '',
+    driverPhoneNum:199999,
+    driverIdentity:'快递代拿',
     disGender:2,
     campusInfo: [],
     campusNameList: [],
@@ -26,9 +28,8 @@ Page({
   },
 
   onLoad() {
-    const id = wx.getStorageSync('id')
-
-    this._getDriverInfo(id)
+    const driverId = wx.getStorageSync('driverId')
+    this._getDriverInfo(driverId)
     this._selectAllCampus()
   },
 
@@ -46,8 +47,8 @@ Page({
       content: '是否保存信息',
       success: (res) => {
         if (res.confirm) {
-          const id = wx.getStorageSync('id')
-          this._infoSum(this.data.disCampus,this.data.disName,this.data.disGender,id)
+          const driverId = wx.getStorageSync('driverId')
+          this._infoSum(this.data.disCampus,this.data.disName,this.data.disGender,driverId)
         } 
       }
     })
@@ -79,11 +80,15 @@ Page({
     getDriverInfo(driverId).then(res => {     
       const disCampus = res.data.data.campusName
       const disName = res.data.data.driverName
-      const disGender=res.data.data.driverGender
+      const disGender = res.data.data.driverGender
+      const driverIdentity = res.data.data.driverIdentity
+      const driverPhoneNum =res.data.data.driverPhone
       this.setData({
         disCampus,
         disName,
-        disGender
+        disGender,
+        // driverIdentity,
+        driverPhoneNum 
       })
     })
   },
@@ -91,13 +96,13 @@ Page({
   // 信息修改提交
   _infoSum(disCampus,disName,driverGender,driverId){  
     loading('正在保存')   
-    infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
+    infoSum(disCampus,disName,driverGender,driverId,1).then(res=>{  
       hideLoading()
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){
         wx.navigateBack({
           delta: 1
         })
-        wx.setStorageSync('campus', this.data.disCampus)
+        wx.setStorageSync('driverCampus', this.data.disCampus)
         app.globalData.disCampus=this.data.disCampus
       } else{
         totast(res.data.msg)

@@ -4,6 +4,14 @@
       <text class="cuIcon-back"></text>
       <slot name="backText"></slot>
     </view>
+    <view class="action" bindtap="toParcelPage" wx:if="{{toParcelPage}}">
+      <text class="cuIcon-back"></text>
+      <slot name="backText"></slot>
+    </view>
+    <view class="action" bindtap="toHome" wx:if="{{toHome}}">
+      <text class="cuIcon-back"></text>
+      <slot name="backText"></slot>
+    </view>
     <view class=" action" wx:if="{{isPerserve}}">
       <text class="cuIcon-back"></text>
       <slot name="perserveText"></slot>

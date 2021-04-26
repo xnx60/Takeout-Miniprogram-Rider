@@ -54,3 +54,33 @@ export function getOrder(id,riderId){
     }
   },'application/x-www-form-urlencoded')
 }
+
+// 快递支付
+export function agentPre(distributionFee,id,orderNumber,riderId,riderProfit,userId){
+  return request({
+    url:API_URL_agentPre,
+    method:'POST',
+    data:{
+      distributionFee,
+      id,
+      orderNumber,
+      riderId,
+      riderProfit,
+      userId,
+    }
+  })
+}
+// 快递分账功能接口
+export function agentSharing(id,orderNumber,riderId,riderProfit,userId){
+  return request({
+    url:API_URL_agentSharing,
+    method:'POST',
+    data:{
+      id,
+      orderNumber,
+      riderId,
+      riderProfit,
+      userId,
+    }
+  },'application/x-www-form-urlencoded')
+}

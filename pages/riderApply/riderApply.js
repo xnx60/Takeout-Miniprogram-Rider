@@ -48,6 +48,10 @@ Page({
     index: null,
     picker: ['是', '否'],
   },
+  onShow(){
+    const driverId = wx.getStorageSync('driverId')
+    this._getDriverInfo(driverId)
+  },
   ChooseImage(e) {
     const {type}=e.currentTarget.dataset 
     const imgUrl=`imgList.${type}.url` 
@@ -80,6 +84,7 @@ Page({
       name: 'file',
       header:{
         'content-type':'multipart/form-data',
+        'driverToken': wx.getStorageSync('driverToken')
       },
       formData: {
         name: type
@@ -117,8 +122,7 @@ Page({
 
   _submitProve(returnUrlList){
     console.log(returnUrlList);
-    
-    const driverId=wx.getStorageSync('id')
+    const driverId=wx.getStorageSync('driverId')
     const idCardR=returnUrlList.idCardR || null
     const idCardB=returnUrlList.idCardB || null
     const campusCard=returnUrlList.campusCard || null
@@ -128,12 +132,32 @@ Page({
       hideLoading()  
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
         totast('提交成功')
-        wx.redirectTo({
-          url: '/pages/home/home',
-        })        
+        if(wx.getStorageSync('driverIdentity') == 1){
+          wx.redirectTo({
+            url: '/pages/home/home',
+          })   
+        }else if(wx.getStorageSync('driverIdentity') == 2) {
+          wx.redirectTo({
+            url: '/pages/parcelModule/parcelPage/parcelPage',
+          }) 
+        }  
       } else if (res.data.code==1500){
         totast(res.data.msg)
       }    
     })
+  },
+   /* 
+获取骑手信息
+*/
+_getDriverInfo(driverId) {
+  getDriverInfo(driverId).then(res => {
+  console.log(res);
+  if(res.data.code = STATUS_CODE_getDriverInfo_SUCCESS){
+    wx.setStorageSync('driverCampus', res.data.data.campusName)
+    wx.setStorageSync('driverStatus', res.data.data.driverStatus)
+    wx.setStorageSync('driverIdentity', res.data.data.driverIdentity)
+    wx.setStorageSync('driverId', res.data.data.driverId)
   }
+})
+},
 })

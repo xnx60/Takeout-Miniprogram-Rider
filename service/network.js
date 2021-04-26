@@ -6,19 +6,31 @@ import {
 } from './config'
 
 export default function (options, headerContentType) {
-  const token = wx.getStorageSync('token')
-  const parcelToken = wx.getStorageSync('parcelToken')
+  const driverToken = wx.getStorageSync('driverToken')
+  // const parcelToken = wx.getStorageSync('parcelToken')
   // const driverLoginStatus = wx.getStorageSync('driverStatus')
-  if (token || parcelToken) {
+  if (driverToken) {
     return new Promise((reslove, reject) => {
       wx.request({
         url: BASE_URL + options.url,
         data: options.data || {},
         header: {
-          'content-type': headerContentType || 'application/json'
+          'content-type': headerContentType || 'application/json',
+          'driverToken': driverToken || parcelToken
         },
         method: options.method || 'get',
-        success: reslove,
+        success: function(res) {
+          if(res.data.code === 1534 || res.data.code === 1535 || res.data.code === 1536 || res.data.code === 1545) {
+            totast('身份验证失败，请重新登录！')
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/login/login',
+              })
+            }, 1000)
+          } else {
+            reslove(res)
+          }
+        },
         fail: reject
       })
     })

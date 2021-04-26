@@ -1,5 +1,5 @@
 <!--pages/personPage.wxml-->
-<cu-custom bgColor="bg-cyan" isBack="true">
+<cu-custom bgColor="bg-cyan" toHome="toHome">
   <text slot="backText">返回</text>
   <text slot="content">个人页面</text>
 </cu-custom>
@@ -12,13 +12,22 @@
 		<view class="title">姓名</view>
 		<view>{{disName}}</view>
 </view>
+<view class="cu-form-group">
+		<view class="title">手机号码</view>
+		<view>{{driverPhoneNum}}</view>
+</view>
+<view class="cu-form-group">
+		<view class="title">身份</view>
+		<view>{{driverIdentity}}</view>
+</view>
 
 <view class="cu-form-group margin-bottom-xl ">
 	<view class="title">校区选择</view>
-	<picker bindchange="PickerCampus" value="{{campusIndex}}" range="{{campusNameList}}">
+	<view>{{disCampus}}</view>
+	<!-- <picker bindchange="PickerCampus" value="{{campusIndex}}" range="{{campusNameList}}">
 		<view class="picker">
 			{{campusIndex?campusNameList[campusIndex]:disCampus}}
 		</view>
-	</picker>
+	</picker> -->
 </view>
-<button class="cu-btn bg-green block margin-tb-sm lg" style="width:656rpx" bindtap="isPerserve">保存信息</button>
+<!-- <button class="cu-btn bg-green block margin-tb-sm lg" style="width:656rpx" bindtap="isPerserve">保存信息</button> -->

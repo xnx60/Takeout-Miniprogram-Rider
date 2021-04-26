@@ -10,11 +10,7 @@
     "pages/infoCom/infoCom",
     "pages/examPage/examPage",
     "pages/parcelModule/parcelPage/parcelPage",
-    "pages/parcelModule/parcelPerson/parcelPerson",
-    "pages/parcelModule/parcelLogin/parcelLogin",
-    "pages/parcelModule/parcelExam/parcelExam",
-    "pages/parcelModule/parcelInfo/parcelInfo",
-    "pages/parcelModule/parcelApply/parcelApply"
+    "pages/parcelModule/parcelPerson/parcelPerson"
   ],
   "window": {
     "navigationStyle": "custom"

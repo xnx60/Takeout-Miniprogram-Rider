@@ -20,6 +20,20 @@
 		</view>
 	</picker>
 </view>
+<view class="identity">
+	<view class="cu-form-group" wx:if="{{isIdentity}}">
+			<view class="title">身份</view>
+			<view>{{driverIdentityName}}</view>
+	</view>
+	<view class="cu-form-group" wx:else>
+		<view class="title">身份选择</view>
+		<picker bindchange="PickerDriverIdentity" value="{{driverIdentityIndex}}" range="{{driverIdentityPicker}}">
+			<view class="picker">
+				{{driverIdentityIndex?driverIdentityPicker[driverIdentityIndex]:'未选择'}}
+			</view>
+		</picker>
+	</view>
+</view>
 
 <view class="cu-form-group">
 		<view class="title">姓名</view>

@@ -14,11 +14,9 @@ Page({
   onLoad: function (options) {
     // console.log(options.status);
     console.log('跳转后');
-    
     const status=JSON.parse(options.status)
     // const status=options.status
     console.log(status);
-    
     this.setData({
       status
     })
@@ -28,7 +26,6 @@ Page({
       url: '/pages/riderApply/riderApply',
     })
   },
-
   _infoSum(disCampus,disName,driverGender,driverId){     
     infoSum(disCampus,disName,driverGender,driverId).then(res=>{  
       if(res.data.code==STATUS_CODE_infoSum_SUCCESSE){

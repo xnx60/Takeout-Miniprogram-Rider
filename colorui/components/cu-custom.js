@@ -42,6 +42,14 @@ Component({
     isLocated: {
       type: [Boolean, String],
       default: false
+    },
+    toParcelPage: {
+      type: [Boolean, String],
+      default: false
+    },
+    toHome: {
+      type: [Boolean, String],
+      default: false
     }
   },
   /**
@@ -62,8 +70,13 @@ Component({
       });
     },
     toHome(){
-      wx.reLaunch({
-        url: '/pages/index/index',
+      wx.navigateTo({
+        url: '/pages/home/home',
+      })
+    },
+    toParcelPage(){
+      wx.navigateTo({
+        url: '/pages/parcelModule/parcelPage/parcelPage',
       })
     },
     showMore(){

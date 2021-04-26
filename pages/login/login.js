@@ -46,7 +46,7 @@ Page({
         url: BASE_URL + API_URL_login,
         method: 'POST',
         header: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         },
         data: {
           code: this.data.code,
@@ -57,11 +57,73 @@ Page({
           hideLoading()
           if (res.data.code == STATUS_CODE_login_SUCCESSE) {
             console.log('登录成功');
-            wx.setStorageSync('id', res.data.data.driverId)
-            wx.setStorageSync('token', res.data.data.driverToken)
-            const driverId = wx.getStorageSync('id')
-            // app.globalData.disCampus = driverId
-            this._checkLoginStatus(driverId)
+            wx.setStorageSync('driverId', res.data.data.driverId)
+            wx.setStorageSync('driverToken', res.data.data.driverToken)
+            if(res.data.data.driverInfo === null){
+              // 第一次登录
+              wx.navigateTo({
+                url: '/pages/entry/entry',
+              })
+            }else{
+              const driverStatus = res.data.data.driverInfo.driverStatus
+              const driverIdentity = res.data.data.driverInfo.driverIdentity
+              wx.setStorageSync('driverStatus', driverStatus)
+              if(driverStatus === 2550 || driverStatus === 2552 || driverStatus === 2553){
+                wx.navigateTo({
+                  url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)
+                })
+                console.log(driverStatus);
+                
+              }else if(driverStatus === 2554){
+                wx.navigateTo({
+                  url: '/pages/infoCom/infoCom',
+                });
+              }else if(driverStatus === 2508){
+                wx.navigateTo({
+                  url: '/pages/riderApply/riderApply',
+                });
+              }else if (driverStatus === 2551){
+                if(driverIdentity === 1){
+                  wx.navigateTo({
+                    url: '/pages/home/home',
+                  })
+                }else {
+                  wx.navigateTo({
+                    url: '/pages/parcelModule/parcelPage/parcelPage',
+                  })
+                }
+              }
+              // switch(driverStatus){
+              //   case 2554:
+              //     wx.navigateTo({
+              //       url: '/pages/infoCom/infoCom',
+              //     });
+              //     break;
+              //   case 2508:
+              //     wx.navigateTo({
+              //       url: '/pages/riderApply/riderApply',
+              //     });
+              //     break;
+              //   case 2550 || 2552 || 2553:
+              //     wx.navigateTo({
+              //       url: '/pages/examPage/examPage?status=' + JSON.stringify(res.data.code)
+              //     })
+              //     break;
+              //   case 2551:
+              //     if(driverIdentity == 1){
+              //       wx.navigateTo({
+              //         url: '/pages/home/home',
+              //       })
+              //     }else {
+              //       wx.navigateTo({
+              //         url: '/pages/parcelModule/parcelPage/parcelPage',
+              //       })
+              //     }
+              //     break;
+              //   default:
+              //     break;
+              // }
+            }
           } else if (res.data.code == 1500) {
             // 传入参数为空  
             console.log('传入参数为空');
@@ -75,30 +137,5 @@ Page({
       totast('授权失败，请重新授权')
     }
 
-  },
-
-  _checkLoginStatus(driverId) {
-    checkLoginStatus(driverId).then(res => {
-      console.log(res,'checkLogin');
-      if (res.data.code == 2508) {
-        // 骑手还没上传证明材料
-        wx.redirectTo({
-          url: '/pages/infoCom/infoCom',
-        })
-      } else if (res.data.code == 2550 || res.data.code == 2552|| res.data.code == 2553) {
-        // 骑手正在审核/审核未通过/封禁
-        wx.redirectTo({
-          url: '/pages/examPage/examPage?status=' + JSON.stringify(res.data.code)
-        })
-      } else if (res.data.code == 2551) {
-        // 审核通过
-        app.onShow()
-        wx.redirectTo({
-          url: '/pages/home/home',
-        })
-      } 
-    })
   }
-
-
 })

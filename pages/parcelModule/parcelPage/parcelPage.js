@@ -2,7 +2,9 @@ import {
   selectRiderOrder,
   getOrder,
   selectWaitToTakeOrder,
-  completeOrder
+  completeOrder,
+  agentPre,
+  agentSharing
 } from '../../../service/parcelModule'
 import {
   TOKEN,
@@ -12,7 +14,9 @@ import {
   STATUS_CODE_selectRiderOrder_SUCCESSE,
   STATUS_CODE_getOrder_SUCCESSE,
   STATUS_CODE_selectWaitToTakeOrder_SUCCESSE,
-  STATUS_CODE_completeOrder_SUCCESSE
+  STATUS_CODE_getDriverInfo_SUCCESS,
+  STATUS_CODE_completeOrder_SUCCESSE,
+  STATUS_CODE_agentSharing_SUCCESSE
 } from '../../../service/config'
 import {
   checkLoginStatus
@@ -64,24 +68,21 @@ Page({
     /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    // 获取骑手信息
-    this._getDriverInfo()
+  async onShow() {
     // 判断登录注册状态
-    const parcelToken = wx.getStorageSync('parcelToken')
-    const parcelId = wx.getStorageSync('parcelId')
-    if(parcelId && parcelToken){
-      this._checkLoginStatus(parcelId)
+    const driverId = wx.getStorageSync('driverId')
+    const driverToken = wx.getStorageSync('driverToken')
+    await this._checkLoginStatus(driverId)
+    const driverStatus = wx.getStorageSync('driverStatus')
+    if( driverStatus == 2551 && driverToken && driverId ){
+      const driverCampus = wx.getStorageSync('driverCampus')
+      this.setData({
+        parcelCampus:driverCampus,
+        parcelId:driverId
+      })
+      await this._selectWaitToTakeOrder()
+      await this._getRiderOrders()
     }
-    const parcelCampus = wx.getStorageSync('parcelCampus')
-    this.setData({
-      parcelCampus,
-      parcelId
-    })
-    // if(parcelCampus){
-    this._selectWaitToTakeOrder()
-    this._getRiderOrders()
-    // }  
   },
     // 获取tabber编号
   handleTabberIndex(e){
@@ -91,6 +92,7 @@ Page({
     
   },
 
+  // 抢单
   takeOrders(e) {
     // 获取页面订单相关信息
     const itemId = e.currentTarget.dataset.id
@@ -105,36 +107,42 @@ Page({
     })
   },
 
+  // 确认送达
   deliveryGoods(e){
     //  获取页面订单id
-     const itemInfo = e.currentTarget.dataset.id
+     const itemId = e.currentTarget.dataset.itemInfo.id
+     const orderNumber = e.currentTarget.dataset.itemInfo.orderNumber
+     const riderId = e.currentTarget.dataset.itemInfo.riderId
+     const riderProfit = e.currentTarget.dataset.itemInfo.riderProfit
+     const userId = e.currentTarget.dataset.itemInfo.userId
      console.log(itemInfo);
      wx.showModal({
        content: '是否确认送达',
        success: (res) => {
          if (res.confirm) {
-          this._completeOrder(itemInfo)
+          this._completeOrder(itemId,()=>{
+            agentSharing(id,orderNumber,riderId,riderProfit,userId).then(res=>{
+              if(res.data.code != STATUS_CODE_agentSharing_SUCCESSE){
+                totast('分账有误',2000)
+              }
+            })
+          })
          }
        }
      })
   },
 
-  toPerson(){
+  // 进入个人页面
+  async toPerson(){
     console.log('进入个人页面'); 
-    const parcelToken = wx.getStorageSync('parcelToken')
-    const parcelId = wx.getStorageSync('parcelId')
-    if (!parcelToken && !parcelId) {
+    const driverToken = wx.getStorageSync('driverToken')
+    const driverId = wx.getStorageSync('driverId')
+    if (!driverToken && !driverId) {
       wx.navigateTo({
-        url: '/pages/parcelModule/parcelLogin/parcelLogin'
+        url: '/pages/login/login'
       })
-    } else if(this.data. parcelLoginStatus==2508){
-      wx.navigateTo({
-        url: '/pages/parcelModule/parcelApply/parcelApply'
-      })
-    }else if(this.data. parcelLoginStatus==2551){
-      wx.navigateTo({
-        url: '/pages/parcelModule/parcelPerson/parcelPerson'
-      })
+    } else{
+      await this._getDriverInfo(driverId)
     }
   },
 
@@ -170,6 +178,40 @@ Page({
       showBottomDialog: false
     })
   },
+
+    /**
+   * 页面上拉触底事件的处理函数
+   */
+  onReachBottom: function () {
+    const tabberIndex = this.data.tabberIndex
+    const type = tabberIndex == 0 ? 'orderLists':'deliveryLists'
+    const goods = this.data.parcelOrder[type]
+    const hasNextPage = goods.hasNextPage
+    const isHideLoadMore = `parcelOrder.${type}.isHideLoadMore`
+    const isHiddenMore = `parcelOrder.${type}.isHiddenMore`
+    this.setData({
+      [isHideLoadMore]: true,
+      [isHiddenMore]: false
+    })
+    if(hasNextPage){
+      // this.setData({
+      //   [isHideLoadMore]:true
+      // })
+      goods.pageNum++
+      // console.log( tabberIndex == 0 );
+      tabberIndex == 0? this._selectWaitToTakeOrder():this._getRiderOrders()
+      // if( tabberIndex == 0 ){
+      //   this._selectWaitToTakeOrder()
+      // }else{
+      //   this._getRiderOrders()
+      // }
+    } else {
+        this.setData({
+          [isHideLoadMore]:false,
+          [isHiddenMore]: true
+        })
+    }
+  },
   
  /** 
  *接口函数封装
@@ -188,8 +230,6 @@ Page({
     selectWaitToTakeOrder(campus,pageNumber,pageSize).then(res=>{
       hideLoading()
       if(res.data.code === STATUS_CODE_selectWaitToTakeOrder_SUCCESSE){
-        console.log(res.data);
-        console.log('获取待接单接口11111111');
         this.data.parcelOrder.orderLists.hasNextPage = res.data.data.hasNextPage                  
         // listGain.push(...res.data.data.list) 
         showLists.push(...res.data.data.list)
@@ -214,6 +254,7 @@ _getOrder(itemId){
     if(res.data.code === STATUS_CODE_getOrder_SUCCESSE){
       this._getRiderOrders()
       this._selectWaitToTakeOrder()
+      totast('抢单成功')
     }
   })
 },
@@ -247,117 +288,100 @@ async _getRiderOrders(){
     this.data.parcelOrder.deliveryLists.isHideLoadMore = false
 },
 // 更新为订单完成
-async _completeOrder(itemInfo){
+async _completeOrder(itemInfo,callback){
   loading('加载中')
   const id = itemInfo
   completeOrder(id).then(res=>{
     hideLoading()
     if(res.data.code===STATUS_CODE_completeOrder_SUCCESSE){
-      console.log('更新为订单完成');
       this._getRiderOrders()
     }
-  })
-},
-// 获取骑手信息
-async _getDriverInfo() {
-  getDriverInfo(wx.getStorageSync('parcelId')).then(res => {     
-    //  console.log('hadCampus',res);
-    wx.setStorageSync('parcelCampus', res.data.data.campusName  )
+  }).then(()=>{
+    callback(id,orderNumber,riderId,riderProfit,userId)
   })
 },
   /* 
   检测登录状态
   */
- async _checkLoginStatus(parcelId) {
-  checkLoginStatus(parcelId).then(res => {
-    wx.setStorageSync('parcelStatus', res.data.code)
-    this.setData({
-      parcelLoginStatus:res.data.code
-    })
-    // console.log(wx.getStorageSync('driverStatus'),'登录状态');     
-    if (res.data.code == 2508) {
-      // 骑手还没上传证明材料
-      wx.redirectTo({
-        url: '/pages/parcelModule/parcelApply/parcelApply',
-      })
-    } else if (res.data.code == 2550 || res.data.code == 2552 || res.data.code==2553) {
-      // 骑手正在审核/审核未通过/封禁
-      console.log('跳转前');
-      wx.redirectTo({
-        url: '/pages/parcelModule/parcelExam/parcelExam?status=' + JSON.stringify(res.data.code)
-      })
-    }
+ _checkLoginStatus(driverId) {
+  checkLoginStatus(driverId).then(res => {
+    wx.setStorageSync('driverStatus', res.data.code)
   })
 },
 
-
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-    const tabberIndex = this.data.tabberIndex
-    const type = tabberIndex == 0 ? 'orderLists':'deliveryLists'
-    const goods = this.data.parcelOrder[type]
-    const hasNextPage = goods.hasNextPage
-    const isHideLoadMore = `parcelOrder.${type}.isHideLoadMore`
-    const isHiddenMore = `parcelOrder.${type}.isHiddenMore`
-    this.setData({
-      [isHideLoadMore]: true,
-      [isHiddenMore]: false
-    })
-    if(hasNextPage){
-      // this.setData({
-      //   [isHideLoadMore]:true
-      // })
-      goods.pageNum++
-      // console.log( tabberIndex == 0 );
-      tabberIndex == 0? this._selectWaitToTakeOrder():this._getRiderOrders()
-      // if( tabberIndex == 0 ){
-      //   this._selectWaitToTakeOrder()
-      // }else{
-      //   this._getRiderOrders()
-      // }
-    } else {
-        this.setData({
-          [isHideLoadMore]:false,
-          [isHiddenMore]: true
-        })
+ /* 
+获取骑手信息（包括审核状态）
+*/
+_getDriverInfo(driverId) {
+  getDriverInfo(driverId).then(res => {
+  console.log(res);
+  if(res.data.code = STATUS_CODE_getDriverInfo_SUCCESS){
+    wx.setStorageSync('driverCampus', res.data.data.campusName)
+    wx.setStorageSync('driverStatus', res.data.data.driverStatus)
+    wx.setStorageSync('driverIdentity', res.data.data.driverIdentity)
+    wx.setStorageSync('driverId', res.data.data.driverId)
+    const driverCampus = res.data.data.campusName
+    const driverName = res.data.data.driverName
+    const driverIdentity = res.data.data.driverIdentity
+    const driverStatus = res.data.data.driverStatus
+    if(driverStatus === 2550 || driverStatus === 2552 || driverStatus === 2553){
+      wx.navigateTo({
+        url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)
+      })
+    }else if(driverStatus === 2554){
+      wx.navigateTo({
+        url: '/pages/infoCom/infoCom',
+      });
+    }else if(driverStatus === 2508){
+      wx.navigateTo({
+        url: '/pages/riderApply/riderApply',
+      });
+    }else if(driverStatus === 2551){
+      wx.navigateTo({
+        url: '/pages/parcelModule/parcelPerson/parcelPerson',
+      });
     }
+    // switch(driverStatus) {
+    //   case 2554:
+    //     wx.navigateTo({
+    //       url: '/pages/infoCom/infoCom',
+    //     });
+    //     break;
+    //   case 2508:
+    //     wx.navigateTo({
+    //       url: '/pages/riderApply/riderApply',
+    //     });
+    //     break;
+    //   case 2550 || 2552 || 2553:
+    //     wx.navigateTo({
+    //       url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)
+    //     })
+    //     break;
+    //   case 2551:
+    //     wx.navigateTo({
+    //       url: '/pages/parcelModule/parcelPerson/parcelPerson',
+    //     });
+    //   default:
+    //     break;  
+    // }
+  }
+})
+},
+/**
+ * 分账 
+ * */
+_agentSharing(){
+  agentSharing(id,orderNumber,riderId,riderProfit,userId).then(res=>{
+    if(res.data.code === STATUS_CODE_agentSharing_SUCCESSE){
 
-    
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  },
-  isLoading (e) {
-    this.setData({
-      isLoad: e.detail.value
-    })
-  },
+    }
+  }).catch(res => {
+    totast('分账出错')
+  })
+}
+  // isLoading (e) {
+  //   this.setData({
+  //     isLoad: e.detail.value
+  //   })
+  // },
 })
