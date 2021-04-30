@@ -20,7 +20,7 @@ Page({
     disCampus: '',
     disName: '',
     driverPhoneNum:199999,
-    driverIdentity:'快递代拿',
+    driverIdentity:'外卖骑手',
     disGender:2,
     campusInfo: [],
     campusNameList: [],

@@ -73,7 +73,7 @@ Page({
     // }
     wx.setStorageSync('driverIdentity', 1)
     wx.navigateTo({
-      url: '/pages/home/home',
+      url: '/pages/infoCom/infoCom',
     })
   },
   async toParcel(){
@@ -96,7 +96,7 @@ Page({
     // }
     wx.setStorageSync('driverIdentity', 2)
     wx.navigateTo({
-      url: '/pages/parcelModule/parcelPage/parcelPage',
+      url: '/pages/infoCom/infoCom',
     })
   },
     /* 

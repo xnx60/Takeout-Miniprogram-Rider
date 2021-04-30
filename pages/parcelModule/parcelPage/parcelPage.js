@@ -76,10 +76,13 @@ Page({
     const driverStatus = wx.getStorageSync('driverStatus')
     if( driverStatus == 2551 && driverToken && driverId ){
       const driverCampus = wx.getStorageSync('driverCampus')
-      this.setData({
-        parcelCampus:driverCampus,
-        parcelId:driverId
-      })
+      if(!driverCampus){
+        this._getDriverInfo(driverId)      
+      }
+      // this.setData({
+      //   parcelCampus:driverCampus,
+      //   parcelId:driverId
+      // })
       await this._selectWaitToTakeOrder()
       await this._getRiderOrders()
     }
@@ -143,6 +146,24 @@ Page({
       })
     } else{
       await this._getDriverInfo(driverId)
+      const driverStatus = wx.getStorageSync('driverStatus')
+      if(driverStatus === 2550 || driverStatus === 2552 || driverStatus === 2553){
+        wx.navigateTo({
+          url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)
+        })
+      }else if(driverStatus === 2554){
+        wx.navigateTo({
+          url: '/pages/infoCom/infoCom',
+        });
+      }else if(driverStatus === 2508){
+        wx.navigateTo({
+          url: '/pages/riderApply/riderApply',
+        });
+      }else if(driverStatus === 2551){
+        wx.navigateTo({
+          url: '/pages/parcelModule/parcelPerson/parcelPerson',
+        });
+      }
     }
   },
 
@@ -220,7 +241,7 @@ Page({
  async _selectWaitToTakeOrder(){
   loading('加载中')
   const tabberIndex = this.data.tabberIndex
-  const campus = this.data.parcelCampus || null
+  const campus = wx.getStorageSync('driverCampus') || null
   const pageNum = this.data.parcelOrder.orderLists.pageNum
   const pageSize = 3
   let showLists = []
@@ -324,23 +345,6 @@ _getDriverInfo(driverId) {
     const driverName = res.data.data.driverName
     const driverIdentity = res.data.data.driverIdentity
     const driverStatus = res.data.data.driverStatus
-    if(driverStatus === 2550 || driverStatus === 2552 || driverStatus === 2553){
-      wx.navigateTo({
-        url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)
-      })
-    }else if(driverStatus === 2554){
-      wx.navigateTo({
-        url: '/pages/infoCom/infoCom',
-      });
-    }else if(driverStatus === 2508){
-      wx.navigateTo({
-        url: '/pages/riderApply/riderApply',
-      });
-    }else if(driverStatus === 2551){
-      wx.navigateTo({
-        url: '/pages/parcelModule/parcelPerson/parcelPerson',
-      });
-    }
     // switch(driverStatus) {
     //   case 2554:
     //     wx.navigateTo({

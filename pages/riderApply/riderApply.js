@@ -6,10 +6,12 @@ import {
   loading,
   hideLoading,
   STATUS_CODE_updatePhoto_SUCCESSE,
-  STATUS_CODE_submitProve_SUCCESSE
+  STATUS_CODE_submitProve_SUCCESSE,
+  STATUS_CODE_getDriverInfo_SUCCESS
 }from '../../service/config'
 import {
-  submitProve
+  submitProve,
+  getDriverInfo
 }from '../../service/infoSum'
 Page({
 
@@ -132,15 +134,18 @@ Page({
       hideLoading()  
       if(res.data.code==STATUS_CODE_submitProve_SUCCESSE){
         totast('提交成功')
-        if(wx.getStorageSync('driverIdentity') == 1){
-          wx.redirectTo({
-            url: '/pages/home/home',
-          })   
-        }else if(wx.getStorageSync('driverIdentity') == 2) {
-          wx.redirectTo({
-            url: '/pages/parcelModule/parcelPage/parcelPage',
-          }) 
-        }  
+        wx.navigateTo({
+          url: '/pages/examPage/examPage',
+        })
+        // if(wx.getStorageSync('driverIdentity') == 1){
+        //   wx.redirectTo({
+        //     url: '/pages/home/home',
+        //   })   
+        // }else if(wx.getStorageSync('driverIdentity') == 2) {
+        //   wx.redirectTo({
+        //     url: '/pages/parcelModule/parcelPage/parcelPage',
+        //   }) 
+        // }  
       } else if (res.data.code==1500){
         totast(res.data.msg)
       }    
@@ -152,7 +157,7 @@ Page({
 _getDriverInfo(driverId) {
   getDriverInfo(driverId).then(res => {
   console.log(res);
-  if(res.data.code = STATUS_CODE_getDriverInfo_SUCCESS){
+  if(res.data.code === STATUS_CODE_getDriverInfo_SUCCESS){
     wx.setStorageSync('driverCampus', res.data.data.campusName)
     wx.setStorageSync('driverStatus', res.data.data.driverStatus)
     wx.setStorageSync('driverIdentity', res.data.data.driverIdentity)

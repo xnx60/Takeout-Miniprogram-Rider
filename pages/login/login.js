@@ -68,6 +68,7 @@ Page({
               const driverStatus = res.data.data.driverInfo.driverStatus
               const driverIdentity = res.data.data.driverInfo.driverIdentity
               wx.setStorageSync('driverStatus', driverStatus)
+              wx.setStorageSync('driverIdentity', driverIdentity)
               if(driverStatus === 2550 || driverStatus === 2552 || driverStatus === 2553){
                 wx.navigateTo({
                   url: '/pages/examPage/examPage?status=' + JSON.stringify(driverStatus)

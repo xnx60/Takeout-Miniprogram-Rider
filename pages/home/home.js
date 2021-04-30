@@ -133,8 +133,8 @@ Page({
     //   await this._getDriverInfo(driverId)
     // }
     const driverToken = wx.getStorageSync('driverToken')
-    const driverlId = wx.getStorageSync('driverlId')
-    await this._checkLoginStatus(driverlId)
+    const driverId = wx.getStorageSync('driverId')
+    await this._checkLoginStatus(driverId)
     const driverStatus = wx.getStorageSync('driverStatus')
     // if(driverStatus == 2551 )?
     if(driverStatus == 2551 && driverId && driverToken){
@@ -186,7 +186,7 @@ Page({
     const type = status == 1 ? 'orderLists' : status == 2 ? 'goodsLists' : status == 3 ? 'deliveryLists' : 'endUpLists'
     const goods = this.data.orders[type]
     const pageNum = goods.pageNum //页码
-    const campus = status == 1 ? this.data.disCampus : null
+    const campus = status == 1 ? wx.getStorageSync('driverCampus') : null
     const riderId = status != 1 ? driverId : null
     let showList = []
     for(let i=1;i<pageNum+1;i++){

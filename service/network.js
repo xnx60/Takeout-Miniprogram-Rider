@@ -20,7 +20,7 @@ export default function (options, headerContentType) {
         },
         method: options.method || 'get',
         success: function(res) {
-          if(res.data.code === 1534 || res.data.code === 1535 || res.data.code === 1536 || res.data.code === 1545) {
+          if(res.data.code === 400) {
             totast('身份验证失败，请重新登录！')
             setTimeout(() => {
               wx.navigateTo({

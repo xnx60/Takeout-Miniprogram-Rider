@@ -1,6 +1,6 @@
-<cu-custom bgColor="bg-cyan" isBack="true">
+<cu-custom bgColor="bg-cyan">
   <text slot="content">审核页面</text>
-  <text slot="backText" bindtap="">返回</text>
+  <!-- <text slot="backText" bindtap="">返回</text> -->
 </cu-custom>
 <view class="text-xxl padding-lr text-center" style="margin-top:500rpx">
   <view class="flex-sub" wx:if="{{status === 2550}}">
